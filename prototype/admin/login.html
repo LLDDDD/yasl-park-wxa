@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .login-bg {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        }
+        .error-shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .password-strength {
+            height: 4px;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="login-bg min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-xl">
+        <!-- Logo和标题 -->
+        <div class="text-center">
+            <img class="mx-auto h-16 w-auto" src="https://picsum.photos/id/64/64/64" alt="森林公园Logo">
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                森林公园管理后台
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                请输入您的账号和密码登录
+            </p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline"></span>
+        </div>
+
+        <!-- 登录表单 -->
+        <form class="mt-8 space-y-6" id="login-form">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <!-- 用户名输入框 -->
+                <div>
+                    <label for="username" class="sr-only">用户名</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input id="username" name="username" type="text" required 
+                            class="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10"
+                            placeholder="请输入用户名">
+                    </div>
+                </div>
+                <!-- 密码输入框 -->
+                <div>
+                    <label for="password" class="sr-only">密码</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input id="password" name="password" type="password" required
+                            class="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10"
+                            placeholder="请输入密码">
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- 密码强度指示器 -->
+                <div class="relative">
+                    <div class="password-strength w-full h-1 bg-gray-200">
+                        <div id="strength-bar" class="h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+                <!-- 验证码 -->
+                <div>
+                    <div class="relative flex">
+                        <input id="captcha" name="captcha" type="text" required
+                            class="appearance-none rounded-none relative block w-2/3 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10"
+                            placeholder="请输入验证码">
+                        <div id="captcha-image" class="w-1/3 h-12 bg-gray-100 flex items-center justify-center text-xl font-bold tracking-wider text-gray-700 select-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记住密码和忘记密码 -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox"
+                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                        记住密码
+                    </label>
+                </div>
+
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                        忘记密码？
+                    </a>
+                </div>
+            </div>
+
+            <!-- 登录按钮 -->
+            <div>
+                <button type="submit" id="login-button" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <i class="fas fa-sign-in-alt text-green-500 group-hover:text-green-400"></i>
+                    </span>
+                    登录
+                </button>
+            </div>
+        </form>
+
+        <!-- 底部版权信息 -->
+        <div class="text-center text-sm text-gray-500">
+            &copy; 2024 森林公园管理系统 版权所有
+        </div>
+    </div>
+
+    <script>
+        // 生成验证码
+        function generateCaptcha() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let captcha = '';
+            for (let i = 0; i < 4; i++) {
+                captcha += chars[Math.floor(Math.random() * chars.length)];
+            }
+            document.getElementById('captcha-image').textContent = captcha;
+            return captcha;
+        }
+
+        // 检查密码强度
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/)) strength += 25;
+            
+            const strengthBar = document.getElementById('strength-bar');
+            strengthBar.style.width = strength + '%';
+            
+            if (strength < 50) {
+                strengthBar.className = 'h-full bg-red-500';
+            } else if (strength < 75) {
+                strengthBar.className = 'h-full bg-yellow-500';
+            } else {
+                strengthBar.className = 'h-full bg-green-500';
+            }
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.querySelector('span').textContent = message;
+            errorDiv.classList.remove('hidden');
+            errorDiv.classList.add('error-shake');
+            setTimeout(() => {
+                errorDiv.classList.remove('error-shake');
+            }, 500);
+        }
+
+        // 初始化页面
+        let currentCaptcha = generateCaptcha();
+        document.getElementById('captcha-image').addEventListener('click', () => {
+            currentCaptcha = generateCaptcha();
+        });
+
+        // 密码显示切换
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // 密码强度检查
+        document.getElementById('password').addEventListener('input', function(e) {
+            checkPasswordStrength(e.target.value);
+        });
+
+        // 表单提交处理
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captcha = document.getElementById('captcha').value.toUpperCase();
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            // 验证码检查
+            if (captcha !== currentCaptcha) {
+                showError('验证码错误，请重新输入');
+                currentCaptcha = generateCaptcha();
+                document.getElementById('captcha').value = '';
+                return;
+            }
+
+            // 模拟登录验证
+            if (username === 'admin' && password === 'admin123') {
+                // 记住密码处理
+                if (rememberMe) {
+                    localStorage.setItem('rememberedUser', JSON.stringify({
+                        username,
+                        password: btoa(password) // 简单的密码编码，实际应使用更安全的方式
+                    }));
+                }
+
+                // 设置登录状态
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loginTime', new Date().getTime());
+                
+                // 跳转到仪表板
+                window.location.href = 'dashboard.html';
+            } else {
+                showError('用户名或密码错误');
+                currentCaptcha = generateCaptcha();
+                document.getElementById('captcha').value = '';
+            }
+        });
+
+        // 检查是否记住密码
+        window.addEventListener('load', function() {
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                const { username, password } = JSON.parse(rememberedUser);
+                document.getElementById('username').value = username;
+                document.getElementById('password').value = atob(password);
+                document.getElementById('remember-me').checked = true;
+            }
+        });
+    </script>
+</body>
+</html> 

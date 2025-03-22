@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户行为分析 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+        
+        /* 图表容器样式 */
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <!-- 侧边栏内容与之前相同 -->
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">用户行为分析</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 时间范围选择 -->
+                <div class="mb-6 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            今日
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            本周
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            本月
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            本年
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="date" class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <span class="text-gray-500">至</span>
+                        <input type="date" class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    </div>
+                </div>
+
+                <!-- 数据概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">活跃用户数</p>
+                                <p class="text-2xl font-semibold text-gray-900 mt-1">1,234</p>
+                                <p class="text-sm text-green-600 mt-1">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    12.5%
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-users text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">总访问量</p>
+                                <p class="text-2xl font-semibold text-gray-900 mt-1">8,567</p>
+                                <p class="text-sm text-green-600 mt-1">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    8.3%
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">平均停留时间</p>
+                                <p class="text-2xl font-semibold text-gray-900 mt-1">15.2分钟</p>
+                                <p class="text-sm text-red-600 mt-1">
+                                    <i class="fas fa-arrow-down mr-1"></i>
+                                    2.1%
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">跳出率</p>
+                                <p class="text-2xl font-semibold text-gray-900 mt-1">32.5%</p>
+                                <p class="text-sm text-green-600 mt-1">
+                                    <i class="fas fa-arrow-down mr-1"></i>
+                                    5.2%
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-chart-pie text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- 访问趋势图 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">访问趋势</h3>
+                        <div id="visitTrendChart" class="chart-container"></div>
+                    </div>
+                    <!-- 用户行为分布图 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">用户行为分布</h3>
+                        <div id="behaviorPieChart" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <!-- 用户行为列表 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">用户行为记录</h3>
+                        <div class="flex items-center space-x-4">
+                            <select class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">所有行为</option>
+                                <option value="visit">页面访问</option>
+                                <option value="search">搜索</option>
+                                <option value="booking">预约</option>
+                                <option value="comment">评论</option>
+                            </select>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center">
+                                <i class="fas fa-file-export mr-2"></i>
+                                导出数据
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">用户</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">行为类型</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">详情</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">时间</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP地址</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-3">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">张三</div>
+                                                <div class="text-sm text-gray-500">13800138000</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">页面访问</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">访问首页</div>
+                                        <div class="text-sm text-gray-500">停留时间: 2分钟</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        2024-03-15 09:30
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        192.168.1.100
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://picsum.photos/id/65/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-3">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">李四</div>
+                                                <div class="text-sm text-gray-500">13900139000</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">预约</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">预约森林徒步活动</div>
+                                        <div class="text-sm text-gray-500">预约时间: 2024-03-20</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        2024-03-15 10:15
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        192.168.1.101
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <img src="https://picsum.photos/id/66/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-3">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">王五</div>
+                                                <div class="text-sm text-gray-500">13700137000</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">评论</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">评论春季赏花活动</div>
+                                        <div class="text-sm text-gray-500">评分: 5星</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        2024-03-15 11:30
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        192.168.1.102
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页控件 -->
+                    <div class="flex justify-between items-center mt-6">
+                        <div class="text-sm text-gray-500">
+                            显示 1 至 3，共 12 条记录
+                        </div>
+                        <div class="flex space-x-1">
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 bg-green-500 text-white">
+                                1
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                2
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                3
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('用户行为分析');
+
+        // 初始化访问趋势图
+        const visitTrendChart = echarts.init(document.getElementById('visitTrendChart'));
+        visitTrendChart.setOption({
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['访问量', '活跃用户']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '访问量',
+                    type: 'line',
+                    smooth: true,
+                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                },
+                {
+                    name: '活跃用户',
+                    type: 'line',
+                    smooth: true,
+                    data: [420, 532, 501, 534, 690, 730, 620]
+                }
+            ]
+        });
+
+        // 初始化用户行为分布图
+        const behaviorPieChart = echarts.init(document.getElementById('behaviorPieChart'));
+        behaviorPieChart.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 10,
+                data: ['页面访问', '搜索', '预约', '评论', '其他']
+            },
+            series: [
+                {
+                    name: '用户行为',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 1048, name: '页面访问' },
+                        { value: 735, name: '搜索' },
+                        { value: 580, name: '预约' },
+                        { value: 484, name: '评论' },
+                        { value: 300, name: '其他' }
+                    ]
+                }
+            ]
+        });
+
+        // 监听窗口大小变化，调整图表大小
+        window.addEventListener('resize', function() {
+            visitTrendChart.resize();
+            behaviorPieChart.resize();
+        });
+    </script>
+</body>
+</html> 

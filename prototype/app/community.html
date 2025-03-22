@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兴趣社群 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .search-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-input {
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 8px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            color: #999;
+        }
+        
+        .search-icon {
+            margin-right: 6px;
+            font-size: 15px;
+        }
+        
+        .community-card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+        }
+        
+        .community-cover {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        
+        .community-info {
+            padding: 12px;
+        }
+        
+        .community-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        
+        .community-tags .tag {
+            margin-bottom: 4px;
+        }
+        
+        .community-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .meta-item i {
+            margin-right: 4px;
+        }
+        
+        .join-btn {
+            background-color: #e9f7ef;
+            color: #05c160;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .join-btn.joined {
+            background-color: #f2f2f2;
+            color: #999;
+        }
+        
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            scrollbar-width: none;
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-tab {
+            padding: 8px 12px;
+            white-space: nowrap;
+            color: #666;
+            font-size: 15px;
+            position: relative;
+            margin-right: 12px;
+        }
+        
+        .category-tab.active {
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .category-tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #05c160;
+            border-radius: 2px;
+        }
+        
+        .community-description {
+            color: #666;
+            font-size: 13px;
+            margin-top: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+        
+        /* 二维码弹窗样式 */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 300px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .qr-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .qr-header h3 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .qr-close {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 18px;
+        }
+        
+        .qr-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .qr-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 12px;
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .qr-tip {
+            font-size: 14px;
+            color: #666;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="home.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">兴趣社群</div>
+    </div>
+
+    <!-- 搜索栏 -->
+    <div class="search-bar">
+        <div class="search-input">
+            <i class="fas fa-search search-icon"></i>
+            <span>搜索社群</span>
+        </div>
+    </div>
+
+    <!-- 分类导航 -->
+    <div class="category-tabs">
+        <div class="category-tab active">全部</div>
+        <div class="category-tab">摄影</div>
+        <div class="category-tab">户外运动</div>
+        <div class="category-tab">养生保健</div>
+        <div class="category-tab">艺术创作</div>
+        <div class="category-tab">亲子活动</div>
+        <div class="category-tab">自然科学</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <div class="container">
+            <!-- 社群列表 -->
+            <div class="community-list">
+                <!-- 社群卡片1 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=130" alt="摄影社区" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">风景摄影社</h3>
+                        <div class="community-description">
+                            专注于自然风光摄影，定期举办户外摄影活动和摄影技巧分享讲座，欢迎摄影爱好者加入。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">摄影</div>
+                            <div class="tag">户外</div>
+                            <div class="tag">艺术</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>128人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>近期活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn" onclick="showQRCode('风景摄影社')">加入</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群卡片2 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=131" alt="户外徒步" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">森林徒步团</h3>
+                        <div class="community-description">
+                            组织各类徒步、登山、露营活动，发现公园最美角落，倡导健康生活方式，增强体魄。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">徒步</div>
+                            <div class="tag">户外</div>
+                            <div class="tag">健身</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>95人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>近期活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn" onclick="showQRCode('森林徒步团')">加入</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群卡片3 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=132" alt="瑜伽团体" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">林间瑜伽</h3>
+                        <div class="community-description">
+                            在自然环境中练习瑜伽，促进身心平衡，每周定期举办户外瑜伽课程，适合各年龄段人群。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">瑜伽</div>
+                            <div class="tag">健康</div>
+                            <div class="tag">冥想</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>64人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>近期活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn joined" onclick="showQRCode('林间瑜伽')">已加入</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群卡片4 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=133" alt="观鸟俱乐部" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">观鸟俱乐部</h3>
+                        <div class="community-description">
+                            探索公园中的鸟类生态，学习鸟类知识，分享观鸟经验，保护野生鸟类栖息地。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">观鸟</div>
+                            <div class="tag">自然</div>
+                            <div class="tag">科普</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>72人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>一般活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn" onclick="showQRCode('观鸟俱乐部')">加入</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群卡片5 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=134" alt="植物爱好者" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">植物爱好者联盟</h3>
+                        <div class="community-description">
+                            认识公园内各类植物，交流养植经验，定期组织植物科普讲座和植物标本采集活动。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">植物</div>
+                            <div class="tag">园艺</div>
+                            <div class="tag">科普</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>83人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>近期活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn" onclick="showQRCode('植物爱好者联盟')">加入</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群卡片6 -->
+                <div class="community-card">
+                    <img src="https://picsum.photos/500/300?image=135" alt="野餐团" class="community-cover">
+                    <div class="community-info">
+                        <h3 class="font-bold">周末野餐团</h3>
+                        <div class="community-description">
+                            每逢周末组织野餐活动，交友聚会，享受户外美食与阳光，营造愉快的社交氛围。
+                        </div>
+                        <div class="community-tags">
+                            <div class="tag">野餐</div>
+                            <div class="tag">美食</div>
+                            <div class="tag">社交</div>
+                        </div>
+                        <div class="community-meta">
+                            <div class="flex">
+                                <div class="meta-item mr-4">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>112人</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>非常活跃</span>
+                                </div>
+                            </div>
+                            <button class="join-btn" onclick="showQRCode('周末野餐团')">加入</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加微信群二维码弹窗 -->
+    <div id="qrCodeModal" class="qr-modal">
+        <div class="qr-content">
+            <div class="qr-header">
+                <h3 id="qrCodeTitle">加入社群</h3>
+                <button class="qr-close" onclick="hideQRCode()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="qr-body">
+                <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com" alt="微信群二维码" class="qr-image">
+                <p class="qr-tip">请使用微信扫描二维码加入社群</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="wx-tabbar">
+        <a href="home.html" class="wx-tab-item">
+            <i class="fas fa-home wx-tab-icon"></i>
+            <span>首页</span>
+        </a>
+        <a href="events.html" class="wx-tab-item">
+            <i class="fas fa-calendar-alt wx-tab-icon"></i>
+            <span>活动</span>
+        </a>
+        <a href="booking.html" class="wx-tab-item">
+            <i class="fas fa-ticket-alt wx-tab-icon"></i>
+            <span>预约</span>
+        </a>
+        <a href="profile.html" class="wx-tab-item">
+            <i class="fas fa-user wx-tab-icon"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script>
+        // 显示企业微信群二维码弹窗
+        function showQRCode(communityName) {
+            const modal = document.getElementById('qrCodeModal');
+            const title = document.getElementById('qrCodeTitle');
+            const qrImage = document.getElementById('qrCodeImage');
+            
+            // 设置标题
+            title.textContent = `加入"${communityName}"`;
+            
+            // 根据不同社群生成不同的二维码链接
+            // 实际应用中应该使用真实的企业微信群二维码
+            const qrData = encodeURIComponent(`加入森林公园${communityName}`);
+            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}`;
+            
+            // 显示弹窗
+            modal.style.display = 'flex';
+            
+            // 阻止点击事件冒泡
+            event.stopPropagation();
+        }
+        
+        // 隐藏二维码弹窗
+        function hideQRCode() {
+            const modal = document.getElementById('qrCodeModal');
+            modal.style.display = 'none';
+        }
+        
+        // 点击弹窗外部区域关闭弹窗
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('qrCodeModal');
+            if (event.target === modal) {
+                hideQRCode();
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动管理 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-xl font-bold" id="sidebar-title">森林公园管理后台</h1>
+                    <button id="toggle-sidebar" class="text-white focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="dashboard.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-home"></i>
+                                <span id="menu-text" class="ml-3">系统概览</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activities.html" class="flex items-center px-4 py-2 text-white bg-green-700 rounded-lg">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="menu-text" class="ml-3">活动管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-registration.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span id="menu-text" class="ml-3">报名管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-star"></i>
+                                <span id="menu-text" class="ml-3">评价管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marketing.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-bullhorn"></i>
+                                <span id="menu-text" class="ml-3">营销工具</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="settings.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-cog"></i>
+                                <span id="menu-text" class="ml-3">系统设置</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">活动管理</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 页面头部 -->
+                <div class="mb-6 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <h2 class="text-2xl font-bold text-gray-800">活动管理</h2>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm" id="total-activities">
+                            共 0 个活动
+                        </span>
+                    </div>
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center space-x-2" onclick="showAddActivityModal()">
+                        <i class="fas fa-plus"></i>
+                        <span>创建活动</span>
+                    </button>
+                </div>
+
+                <!-- 搜索和筛选 -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="搜索活动名称" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                        </div>
+                        <div>
+                            <select id="type-filter" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">所有类型</option>
+                                <option value="outdoor">户外活动</option>
+                                <option value="education">科普教育</option>
+                                <option value="culture">文化活动</option>
+                                <option value="charity">公益活动</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="status-filter" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">所有状态</option>
+                                <option value="draft">草稿</option>
+                                <option value="published">已发布</option>
+                                <option value="ongoing">进行中</option>
+                                <option value="ended">已结束</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="date" id="date-filter" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <button class="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200" onclick="resetFilters()">
+                                重置筛选
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 活动列表 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 活动卡片将通过 JavaScript 动态插入 -->
+                </div>
+
+                <!-- 分页控件 -->
+                <div class="mt-6 flex justify-between items-center bg-white rounded-lg shadow-sm p-4">
+                    <div class="text-sm text-gray-500">
+                        每页显示：
+                        <select id="page-size" class="border rounded px-2 py-1 ml-1">
+                            <option value="9">9</option>
+                            <option value="18">18</option>
+                            <option value="36">36</option>
+                        </select>
+                    </div>
+                    <div class="flex space-x-2" id="pagination">
+                        <!-- 分页按钮将通过 JavaScript 动态插入 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建/编辑活动弹窗 -->
+    <div id="activity-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800" id="modal-title">创建活动</h3>
+                <button onclick="hideActivityModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="activity-form" class="px-6 py-4">
+                <input type="hidden" id="activity-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动名称</label>
+                            <input type="text" id="title" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动类型</label>
+                            <select id="type" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="outdoor">户外活动</option>
+                                <option value="education">科普教育</option>
+                                <option value="culture">文化活动</option>
+                                <option value="charity">公益活动</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动时间</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="datetime-local" id="start-time" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <input type="datetime-local" id="end-time" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动地点</label>
+                            <input type="text" id="location" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">参与人数</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="number" id="min-participants" required placeholder="最小人数" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <input type="number" id="max-participants" required placeholder="最大人数" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动封面</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                <input type="file" id="cover" accept="image/*" class="hidden">
+                                <div id="cover-preview" class="hidden mb-4">
+                                    <img src="" alt="活动封面" class="max-h-40 mx-auto">
+                                </div>
+                                <button type="button" onclick="document.getElementById('cover').click()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                                    <i class="fas fa-upload mr-2"></i>上传图片
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动简介</label>
+                            <textarea id="description" rows="3" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">活动详情</label>
+                            <textarea id="content" rows="6" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">报名设置</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="need-review" class="mr-2">
+                                    <span>需要审核</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="need-deposit" class="mr-2">
+                                    <span>需要支付押金</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button class="px-4 py-2 text-gray-500 hover:text-gray-700" onclick="hideActivityModal()">取消</button>
+                <button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600" onclick="saveActivityAsDraft()">保存草稿</button>
+                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700" onclick="publishActivity()">发布活动</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('活动管理');
+
+        // 当前页码和每页显示数量
+        let currentPage = 1;
+        let pageSize = 9;
+        let totalActivities = 0;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载活动列表
+            loadActivities();
+
+            // 监听搜索输入
+            document.getElementById('search-input').addEventListener('input', debounce(loadActivities, 500));
+
+            // 监听筛选条件变化
+            document.getElementById('type-filter').addEventListener('change', loadActivities);
+            document.getElementById('status-filter').addEventListener('change', loadActivities);
+            document.getElementById('date-filter').addEventListener('change', loadActivities);
+            document.getElementById('page-size').addEventListener('change', function() {
+                pageSize = parseInt(this.value);
+                currentPage = 1;
+                loadActivities();
+            });
+
+            // 监听图片上传
+            document.getElementById('cover').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('cover-preview');
+                        preview.classList.remove('hidden');
+                        preview.querySelector('img').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // 加载活动列表
+        async function loadActivities() {
+            try {
+                const searchQuery = document.getElementById('search-input').value;
+                const typeFilter = document.getElementById('type-filter').value;
+                const statusFilter = document.getElementById('status-filter').value;
+                const dateFilter = document.getElementById('date-filter').value;
+
+                // TODO: 替换为实际的 API 调用
+                const response = await fetch(`/api/activities?page=${currentPage}&pageSize=${pageSize}&search=${searchQuery}&type=${typeFilter}&status=${statusFilter}&date=${dateFilter}`);
+                const data = await response.json();
+
+                totalActivities = data.total;
+                document.getElementById('total-activities').textContent = `共 ${totalActivities} 个活动`;
+
+                // 渲染活动列表
+                renderActivityList(data.activities);
+
+                // 更新分页
+                renderPagination();
+            } catch (error) {
+                console.error('加载活动列表失败:', error);
+                showToast('加载活动列表失败，请稍后重试', 'error');
+            }
+        }
+
+        // 渲染活动列表
+        function renderActivityList(activities) {
+            const container = document.querySelector('.grid');
+            container.innerHTML = '';
+
+            activities.forEach(activity => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
+                card.innerHTML = `
+                    <div class="relative pb-2/3">
+                        <img src="${activity.cover || 'https://picsum.photos/400/300'}" alt="${activity.title}" class="absolute h-full w-full object-cover">
+                        <div class="absolute top-2 right-2">
+                            <span class="px-2 py-1 text-xs rounded-full ${getStatusBadgeClass(activity.status)}">
+                                ${getStatusText(activity.status)}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">${activity.title}</h3>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <p><i class="fas fa-calendar-alt w-5"></i> ${formatDate(activity.startTime)} ~ ${formatDate(activity.endTime)}</p>
+                            <p><i class="fas fa-map-marker-alt w-5"></i> ${activity.location}</p>
+                            <p><i class="fas fa-users w-5"></i> ${activity.currentParticipants}/${activity.maxParticipants}人</p>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="space-x-2">
+                                <button onclick="editActivity(${activity.id})" class="px-3 py-1 text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteActivity(${activity.id})" class="px-3 py-1 text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <a href="activity-registration.html?id=${activity.id}" class="text-green-600 hover:text-green-800">
+                                查看报名 <i class="fas fa-chevron-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 渲染分页
+        function renderPagination() {
+            const totalPages = Math.ceil(totalActivities / pageSize);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // 上一页按钮
+            const prevButton = document.createElement('button');
+            prevButton.className = `px-3 py-1 rounded-md ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`;
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadActivities();
+                }
+            };
+            pagination.appendChild(prevButton);
+
+            // 页码按钮
+            for (let i = 1; i <= totalPages; i++) {
+                if (
+                    i === 1 || // 第一页
+                    i === totalPages || // 最后一页
+                    (i >= currentPage - 1 && i <= currentPage + 1) // 当前页码前后一页
+                ) {
+                    const pageButton = document.createElement('button');
+                    pageButton.className = `px-3 py-1 rounded-md ${i === currentPage ? 'bg-green-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`;
+                    pageButton.textContent = i;
+                    pageButton.onclick = () => {
+                        currentPage = i;
+                        loadActivities();
+                    };
+                    pagination.appendChild(pageButton);
+                } else if (
+                    i === currentPage - 2 ||
+                    i === currentPage + 2
+                ) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'px-3 py-1';
+                    ellipsis.textContent = '...';
+                    pagination.appendChild(ellipsis);
+                }
+            }
+
+            // 下一页按钮
+            const nextButton = document.createElement('button');
+            nextButton.className = `px-3 py-1 rounded-md ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`;
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadActivities();
+                }
+            };
+            pagination.appendChild(nextButton);
+        }
+
+        // 显示创建活动弹窗
+        function showAddActivityModal() {
+            document.getElementById('modal-title').textContent = '创建活动';
+            document.getElementById('activity-id').value = '';
+            document.getElementById('activity-form').reset();
+            document.getElementById('cover-preview').classList.add('hidden');
+            document.getElementById('activity-modal').classList.remove('hidden');
+            document.getElementById('activity-modal').classList.add('flex');
+        }
+
+        // 显示编辑活动弹窗
+        async function editActivity(activityId) {
+            try {
+                document.getElementById('modal-title').textContent = '编辑活动';
+                document.getElementById('activity-id').value = activityId;
+
+                // TODO: 替换为实际的 API 调用
+                const response = await fetch(`/api/activities/${activityId}`);
+                const activity = await response.json();
+
+                // 填充表单数据
+                document.getElementById('title').value = activity.title;
+                document.getElementById('type').value = activity.type;
+                document.getElementById('start-time').value = activity.startTime;
+                document.getElementById('end-time').value = activity.endTime;
+                document.getElementById('location').value = activity.location;
+                document.getElementById('min-participants').value = activity.minParticipants;
+                document.getElementById('max-participants').value = activity.maxParticipants;
+                document.getElementById('description').value = activity.description;
+                document.getElementById('content').value = activity.content;
+                document.getElementById('need-review').checked = activity.needReview;
+                document.getElementById('need-deposit').checked = activity.needDeposit;
+
+                // 显示封面预览
+                if (activity.cover) {
+                    const preview = document.getElementById('cover-preview');
+                    preview.classList.remove('hidden');
+                    preview.querySelector('img').src = activity.cover;
+                }
+
+                document.getElementById('activity-modal').classList.remove('hidden');
+                document.getElementById('activity-modal').classList.add('flex');
+            } catch (error) {
+                console.error('加载活动信息失败:', error);
+                showToast('加载活动信息失败，请稍后重试', 'error');
+            }
+        }
+
+        // 隐藏活动弹窗
+        function hideActivityModal() {
+            document.getElementById('activity-modal').classList.remove('flex');
+            document.getElementById('activity-modal').classList.add('hidden');
+        }
+
+        // 保存活动为草稿
+        async function saveActivityAsDraft() {
+            await saveActivity('draft');
+        }
+
+        // 发布活动
+        async function publishActivity() {
+            await saveActivity('published');
+        }
+
+        // 保存活动
+        async function saveActivity(status) {
+            try {
+                const activityId = document.getElementById('activity-id').value;
+                const formData = new FormData();
+                formData.append('title', document.getElementById('title').value);
+                formData.append('type', document.getElementById('type').value);
+                formData.append('startTime', document.getElementById('start-time').value);
+                formData.append('endTime', document.getElementById('end-time').value);
+                formData.append('location', document.getElementById('location').value);
+                formData.append('minParticipants', document.getElementById('min-participants').value);
+                formData.append('maxParticipants', document.getElementById('max-participants').value);
+                formData.append('description', document.getElementById('description').value);
+                formData.append('content', document.getElementById('content').value);
+                formData.append('needReview', document.getElementById('need-review').checked);
+                formData.append('needDeposit', document.getElementById('need-deposit').checked);
+                formData.append('status', status);
+
+                const coverFile = document.getElementById('cover').files[0];
+                if (coverFile) {
+                    formData.append('cover', coverFile);
+                }
+
+                // TODO: 替换为实际的 API 调用
+                const response = await fetch(`/api/activities${activityId ? `/${activityId}` : ''}`, {
+                    method: activityId ? 'PUT' : 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('保存失败');
+                }
+
+                hideActivityModal();
+                loadActivities();
+                showToast(`${activityId ? '编辑' : '创建'}活动成功`);
+            } catch (error) {
+                console.error('保存活动失败:', error);
+                showToast(`${activityId ? '编辑' : '创建'}活动失败，请稍后重试`, 'error');
+            }
+        }
+
+        // 删除活动
+        async function deleteActivity(activityId) {
+            if (!confirm('确定要删除这个活动吗？')) return;
+
+            try {
+                // TODO: 替换为实际的 API 调用
+                const response = await fetch(`/api/activities/${activityId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('删除失败');
+                }
+
+                loadActivities();
+                showToast('删除活动成功');
+            } catch (error) {
+                console.error('删除活动失败:', error);
+                showToast('删除活动失败，请稍后重试', 'error');
+            }
+        }
+
+        // 重置筛选条件
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('type-filter').value = '';
+            document.getElementById('status-filter').value = '';
+            document.getElementById('date-filter').value = '';
+            loadActivities();
+        }
+
+        // 工具函数
+        function formatDate(date) {
+            return new Date(date).toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function getStatusBadgeClass(status) {
+            const classes = {
+                draft: 'bg-gray-100 text-gray-800',
+                published: 'bg-green-100 text-green-800',
+                ongoing: 'bg-blue-100 text-blue-800',
+                ended: 'bg-yellow-100 text-yellow-800',
+                cancelled: 'bg-red-100 text-red-800'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                draft: '草稿',
+                published: '已发布',
+                ongoing: '进行中',
+                ended: '已结束',
+                cancelled: '已取消'
+            };
+            return texts[status] || '未知状态';
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function showToast(message, type = 'success') {
+            // TODO: 实现消息提示
+            alert(message);
+        }
+    </script>
+</body>
+</html> 

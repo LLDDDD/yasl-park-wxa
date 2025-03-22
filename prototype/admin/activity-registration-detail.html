@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报名详情 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background-color: #E5E7EB;
+        }
+        .timeline-item:last-child::before {
+            height: 50%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <!-- 侧边栏内容与之前相同 -->
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">报名详情</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- 左侧：报名信息 -->
+                    <div class="col-span-2 space-y-6">
+                        <!-- 活动信息 -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">活动信息</h3>
+                            <div class="flex items-start space-x-4">
+                                <img src="https://picsum.photos/id/64/200/150" alt="活动封面" class="w-48 h-36 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <h4 class="text-xl font-semibold text-gray-800 mb-2">2024年春季赏花节</h4>
+                                    <div class="space-y-2 text-gray-600">
+                                        <p><i class="far fa-calendar-alt mr-2"></i>活动时间：2024-04-01 至 2024-04-15</p>
+                                        <p><i class="far fa-clock mr-2"></i>开放时间：08:00-18:00</p>
+                                        <p><i class="fas fa-map-marker-alt mr-2"></i>活动地点：森林公园主园区</p>
+                                        <p><i class="fas fa-ticket-alt mr-2"></i>票价：80元/人</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 报名信息 -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">报名信息</h3>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">姓名</label>
+                                        <p class="text-gray-800">张三</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">手机号码</label>
+                                        <p class="text-gray-800">138****1234</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">身份证号</label>
+                                        <p class="text-gray-800">110****1998****5678</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">报名时间</label>
+                                        <p class="text-gray-800">2024-03-15 10:30:25</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">报名状态</label>
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            待审核
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">付款状态</label>
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            未付款
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 备注信息 -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">备注信息</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">特殊需求</label>
+                                    <p class="text-gray-800">需要提供轮椅服务</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">管理员备注</label>
+                                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" rows="3" placeholder="请输入备注信息"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：状态和操作记录 -->
+                    <div class="space-y-6">
+                        <!-- 审核操作 -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">审核操作</h3>
+                            <div class="space-y-4">
+                                <button class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                    <i class="fas fa-check mr-2"></i>通过报名
+                                </button>
+                                <button class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                                    <i class="fas fa-times mr-2"></i>拒绝报名
+                                </button>
+                                <button class="w-full bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+                                    <i class="fas fa-print mr-2"></i>打印凭证
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 操作记录 -->
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">操作记录</h3>
+                            <div class="relative pl-8">
+                                <!-- 时间线项目 -->
+                                <div class="timeline-item relative pb-6">
+                                    <div class="absolute -left-10 mt-1.5">
+                                        <div class="w-5 h-5 bg-blue-500 rounded-full border-4 border-white"></div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">提交报名</p>
+                                        <p class="text-sm text-gray-500">2024-03-15 10:30:25</p>
+                                        <p class="mt-1 text-sm text-gray-600">用户提交活动报名申请</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item relative pb-6">
+                                    <div class="absolute -left-10 mt-1.5">
+                                        <div class="w-5 h-5 bg-yellow-500 rounded-full border-4 border-white"></div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">等待审核</p>
+                                        <p class="text-sm text-gray-500">2024-03-15 10:30:25</p>
+                                        <p class="mt-1 text-sm text-gray-600">报名信息已提交，等待管理员审核</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('报名详情');
+    </script>
+</body>
+</html> 

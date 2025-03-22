@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统概览 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-xl font-bold" id="sidebar-title">森林公园管理后台</h1>
+                    <button id="toggle-sidebar" class="text-white focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="dashboard.html" class="flex items-center px-4 py-2 text-white bg-green-700 rounded-lg">
+                                <i class="fas fa-home"></i>
+                                <span id="menu-text" class="ml-3">系统概览</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activities.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="menu-text" class="ml-3">活动管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-registration.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span id="menu-text" class="ml-3">报名管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-star"></i>
+                                <span id="menu-text" class="ml-3">评价管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marketing.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-bullhorn"></i>
+                                <span id="menu-text" class="ml-3">营销工具</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="settings.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-cog"></i>
+                                <span id="menu-text" class="ml-3">系统设置</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">系统概览</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 数据概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <!-- 活动总数 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">活动总数</h3>
+                            <span class="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                较上月 +12%
+                            </span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold text-gray-900">24</span>
+                            <span class="ml-2 text-sm text-gray-500">个活动</span>
+                        </div>
+                        <a href="activities.html" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                            查看详情
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- 报名人数 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">报名人数</h3>
+                            <span class="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                较上月 +25%
+                            </span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold text-gray-900">1,234</span>
+                            <span class="ml-2 text-sm text-gray-500">人次</span>
+                        </div>
+                        <a href="activity-registration.html" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                            查看详情
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- 用户评分 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">用户评分</h3>
+                            <span class="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                较上月 +0.2
+                            </span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold text-gray-900">4.8</span>
+                            <div class="ml-2 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <a href="activity-reviews.html" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                            查看详情
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- 优惠券使用 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-medium text-gray-900">优惠券使用</h3>
+                            <span class="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs">
+                                较上月 +18%
+                            </span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-3xl font-bold text-gray-900">856</span>
+                            <span class="ml-2 text-sm text-gray-500">张</span>
+                        </div>
+                        <a href="marketing.html" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                            查看详情
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- 活动报名趋势 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">活动报名趋势</h3>
+                        <div id="registration-trend" class="w-full h-80"></div>
+                    </div>
+
+                    <!-- 活动类型分布 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">活动类型分布</h3>
+                        <div id="activity-types" class="w-full h-80"></div>
+                    </div>
+                </div>
+
+                <!-- 最新动态 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">最新动态</h3>
+                        <a href="#" class="text-sm text-green-600 hover:text-green-700">查看全部</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-green-100">
+                                    <i class="fas fa-calendar-plus text-green-600"></i>
+                                </span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">新活动发布</p>
+                                <p class="text-sm text-gray-500">2024年春季赏花节活动已发布，可以开始报名</p>
+                                <p class="text-xs text-gray-400 mt-1">10分钟前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-100">
+                                    <i class="fas fa-user-plus text-blue-600"></i>
+                                </span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">新增报名</p>
+                                <p class="text-sm text-gray-500">森林徒步探索之旅新增15人报名</p>
+                                <p class="text-xs text-gray-400 mt-1">30分钟前</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-yellow-100">
+                                    <i class="fas fa-star text-yellow-600"></i>
+                                </span>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">新增评价</p>
+                                <p class="text-sm text-gray-500">夏日荧光夜跑活动收到3条新评价</p>
+                                <p class="text-xs text-gray-400 mt-1">1小时前</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 初始化图表
+        const registrationChart = echarts.init(document.getElementById('registration-trend'));
+        const activityTypesChart = echarts.init(document.getElementById('activity-types'));
+
+        // 活动报名趋势图表配置
+        const registrationOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [150, 230, 224, 218, 135, 147, 260],
+                type: 'line',
+                smooth: true,
+                lineStyle: {
+                    color: '#059669'
+                },
+                itemStyle: {
+                    color: '#059669'
+                }
+            }]
+        };
+
+        // 活动类型分布图表配置
+        const activityTypesOption = {
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                right: 10,
+                top: 'center'
+            },
+            series: [{
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 35, name: '赏花活动' },
+                    { value: 25, name: '徒步探索' },
+                    { value: 20, name: '夜跑活动' },
+                    { value: 15, name: '科普讲座' },
+                    { value: 5, name: '其他活动' }
+                ]
+            }]
+        };
+
+        // 渲染图表
+        registrationChart.setOption(registrationOption);
+        activityTypesChart.setOption(activityTypesOption);
+
+        // 窗口大小改变时重绘图表
+        window.addEventListener('resize', function() {
+            registrationChart.resize();
+            activityTypesChart.resize();
+        });
+    </script>
+</body>
+</html> 

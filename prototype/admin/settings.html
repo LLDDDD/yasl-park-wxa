@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统设置 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-xl font-bold" id="sidebar-title">森林公园管理后台</h1>
+                    <button id="toggle-sidebar" class="text-white focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="dashboard.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-home"></i>
+                                <span id="menu-text" class="ml-3">系统概览</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activities.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="menu-text" class="ml-3">活动管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-registration.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span id="menu-text" class="ml-3">报名管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-star"></i>
+                                <span id="menu-text" class="ml-3">评价管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marketing.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-bullhorn"></i>
+                                <span id="menu-text" class="ml-3">营销工具</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="settings.html" class="flex items-center px-4 py-2 text-white bg-green-700 rounded-lg">
+                                <i class="fas fa-cog"></i>
+                                <span id="menu-text" class="ml-3">系统设置</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">系统设置</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 设置导航 -->
+                <div class="mb-6 flex items-center space-x-4">
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700">
+                        基本设置
+                    </button>
+                    <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        安全设置
+                    </button>
+                    <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        通知设置
+                    </button>
+                    <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        备份设置
+                    </button>
+                </div>
+
+                <!-- 基本设置表单 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">基本设置</h3>
+                    <form class="space-y-6">
+                        <!-- 系统信息 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">系统信息</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">系统名称</label>
+                                    <input type="text" value="森林公园管理后台" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">系统Logo</label>
+                                    <div class="mt-1 flex items-center">
+                                        <img src="https://picsum.photos/id/64/40/40" alt="系统Logo" class="w-10 h-10 rounded">
+                                        <button type="button" class="ml-4 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                            更换Logo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 联系方式 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">联系方式</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">联系电话</label>
+                                    <input type="tel" value="400-123-4567" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">电子邮箱</label>
+                                    <input type="email" value="support@example.com" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 时间设置 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">时间设置</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">时区</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="Asia/Shanghai">中国标准时间 (UTC+8)</option>
+                                        <option value="UTC">世界标准时间 (UTC)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">日期格式</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 其他设置 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">其他设置</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">每页显示记录数</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="10">10条</option>
+                                        <option value="20">20条</option>
+                                        <option value="50">50条</option>
+                                        <option value="100">100条</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">系统维护模式</label>
+                                    <div class="mt-1">
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                            <span class="ml-2 text-sm text-gray-700">启用维护模式</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
+                                保存设置
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('系统设置');
+    </script>
+</body>
+</html> 

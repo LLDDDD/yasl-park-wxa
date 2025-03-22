@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .about-header {
+            height: 200px;
+            position: relative;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+        }
+        
+        .about-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .about-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));
+        }
+        
+        .about-header-content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+        }
+        
+        .about-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .about-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .about-section {
+            background-color: white;
+            border-radius: 12px;
+            margin: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 12px;
+        }
+        
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 4px;
+            height: 16px;
+            width: 4px;
+            background-color: #05c160;
+            border-radius: 2px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e9f7ef;
+            color: #05c160;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .info-text {
+            font-size: 14px;
+        }
+        
+        .info-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .info-detail {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .team-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .member-role {
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="profile.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">关于我们</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <!-- 头部图片 - 使用可靠的高质量图片源 -->
+        <div class="about-header">
+            <img src="https://picsum.photos/800/400?image=90" alt="森林公园风景">
+            <div class="about-header-overlay"></div>
+            <div class="about-header-content">
+                <div class="about-title">森林公园</div>
+                <div class="about-subtitle">自然生态·体验·教育·休闲</div>
+            </div>
+        </div>
+        
+        <!-- 公园简介 -->
+        <div class="about-section">
+            <div class="section-title">公园简介</div>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                森林公园位于城市东北部，占地面积约2000公顷，是集自然保护、科普教育、生态旅游和休闲娱乐为一体的综合性公园。园内保存着丰富的植物资源，拥有超过500种植物和200多种野生动物，是城市中难得的"绿色王国"。
+            </p>
+            <p class="text-sm text-gray-600 leading-relaxed mt-2">
+                公园创建于1986年，经过多年发展，现已成为国家AAAA级旅游景区，每年接待游客近百万人次。公园致力于为市民提供优质的生态休闲空间，同时开展多种形式的环境教育和科普活动，推动生态文明建设。
+            </p>
+        </div>
+        
+        <!-- 联系方式 -->
+        <div class="about-section">
+            <div class="section-title">联系方式</div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="info-text">
+                    <div class="info-title">咨询电话</div>
+                    <div class="info-detail">0755-12345678</div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="info-text">
+                    <div class="info-title">电子邮箱</div>
+                    <div class="info-detail">contact@forestpark.com</div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="info-text">
+                    <div class="info-title">开放时间</div>
+                    <div class="info-detail">周一至周日 7:00-19:00</div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="info-text">
+                    <div class="info-title">园区地址</div>
+                    <div class="info-detail">广东省深圳市南山区森林大道108号</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 管理团队 -->
+        <div class="about-section">
+            <div class="section-title">管理团队</div>
+            
+            <div class="team-member">
+                <!-- 用户头像 - 使用可靠的高质量图片源 -->
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="张主任" class="member-avatar">
+                <div class="member-info">
+                    <div class="member-name">张明</div>
+                    <div class="member-role">公园管理处 主任</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <!-- 用户头像 - 使用可靠的高质量图片源 -->
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="李副主任" class="member-avatar">
+                <div class="member-info">
+                    <div class="member-name">李芳</div>
+                    <div class="member-role">公园管理处 副主任</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <!-- 用户头像 - 使用可靠的高质量图片源 -->
+                <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="王主任" class="member-avatar">
+                <div class="member-info">
+                    <div class="member-name">王强</div>
+                    <div class="member-role">科普教育中心 主任</div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <!-- 用户头像 - 使用可靠的高质量图片源 -->
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="陈主任" class="member-avatar">
+                <div class="member-info">
+                    <div class="member-name">陈静</div>
+                    <div class="member-role">游客服务中心 主任</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 版本信息 -->
+        <div class="about-section">
+            <div class="section-title">版本信息</div>
+            <div class="text-center py-2">
+                <p class="text-sm text-gray-500">森林公园小程序</p>
+                <p class="text-sm text-gray-500 mt-1">V1.0.0</p>
+                <p class="text-xs text-gray-400 mt-4">© 2023 森林公园管理处 版权所有</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑活动 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <!-- 侧边栏内容与之前相同 -->
+        </aside>
+
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">编辑活动</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="p-6">
+                <!-- 编辑表单 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <form class="space-y-6">
+                        <!-- 基本信息 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">基本信息</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">活动名称</label>
+                                    <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">活动类型</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="festival">节日活动</option>
+                                        <option value="education">科普教育</option>
+                                        <option value="sports">运动健身</option>
+                                        <option value="culture">文化活动</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动时间 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">活动时间</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">开始日期</label>
+                                    <input type="date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">结束日期</label>
+                                    <input type="date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">开始时间</label>
+                                    <input type="time" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">结束时间</label>
+                                    <input type="time" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动地点 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">活动地点</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">活动区域</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="main">主园区</option>
+                                        <option value="north">北园区</option>
+                                        <option value="south">南园区</option>
+                                        <option value="east">东园区</option>
+                                        <option value="west">西园区</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">具体地点</label>
+                                    <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动封面 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">活动封面</h4>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-48 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <i class="fas fa-image text-gray-400 text-2xl mb-2"></i>
+                                        <p class="text-sm text-gray-500">点击上传图片</p>
+                                        <p class="text-xs text-gray-400">建议尺寸：800x600px</p>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    <p>支持 jpg、png 格式</p>
+                                    <p>文件大小不超过 2MB</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动详情 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">活动详情</h4>
+                            <div class="border border-gray-300 rounded-md">
+                                <div class="border-b border-gray-300 p-2 bg-gray-50">
+                                    <div class="flex space-x-2">
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-bold"></i>
+                                        </button>
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-italic"></i>
+                                        </button>
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-underline"></i>
+                                        </button>
+                                        <div class="border-l border-gray-300 mx-2"></div>
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-list-ul"></i>
+                                        </button>
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-list-ol"></i>
+                                        </button>
+                                        <button class="p-1 text-gray-600 hover:text-gray-900">
+                                            <i class="fas fa-quote-left"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea class="w-full h-96 p-4 focus:outline-none" placeholder="请输入活动详情..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 报名设置 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">报名设置</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">报名人数上限</label>
+                                    <input type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">报名截止时间</label>
+                                    <input type="datetime-local" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">是否需要审核</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="yes">是</option>
+                                        <option value="no">否</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">是否需要付费</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="yes">是</option>
+                                        <option value="no">否</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 其他设置 -->
+                        <div class="space-y-4">
+                            <h4 class="text-sm font-medium text-gray-700">其他设置</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">活动标签</label>
+                                    <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" placeholder="输入标签，用逗号分隔">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">活动状态</label>
+                                    <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                        <option value="draft">草稿</option>
+                                        <option value="published">立即发布</option>
+                                        <option value="scheduled">定时发布</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="flex justify-end space-x-4">
+                            <button type="button" class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                保存草稿
+                            </button>
+                            <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                发布活动
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('编辑活动');
+    </script>
+</body>
+</html> 

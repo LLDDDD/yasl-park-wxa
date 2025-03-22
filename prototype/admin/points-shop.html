@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分商城管理 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+        
+        /* 商品卡片样式 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <!-- 侧边栏内容与之前相同 -->
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">积分商城管理</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 操作栏 -->
+                <div class="mb-6 flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
+                            <i class="fas fa-plus mr-2"></i>
+                            添加商品
+                        </button>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center">
+                            <i class="fas fa-cog mr-2"></i>
+                            商品分类
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="搜索商品" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        <select class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="">所有分类</option>
+                            <option value="ticket">门票优惠券</option>
+                            <option value="souvenir">文创商品</option>
+                            <option value="service">特色服务</option>
+                        </select>
+                        <select class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="">所有状态</option>
+                            <option value="active">上架中</option>
+                            <option value="inactive">已下架</option>
+                            <option value="soldout">已售罄</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 商品列表 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="product-grid">
+                        <!-- 商品卡片 -->
+                        <div class="product-card bg-white shadow">
+                            <div class="product-badge">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">上架中</span>
+                            </div>
+                            <img src="https://picsum.photos/id/26/300/300" alt="商品图片" class="product-image w-full">
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-900">森林公园门票</h3>
+                                <div class="mt-2 flex items-center text-green-600">
+                                    <i class="fas fa-coins mr-1"></i>
+                                    <span class="font-bold">500</span>
+                                    <span class="text-sm ml-1">积分</span>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <span>库存: 100</span>
+                                    <span class="mx-2">|</span>
+                                    <span>已兑换: 50</span>
+                                </div>
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button class="p-2 text-gray-600 hover:text-blue-600" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-green-600" title="编辑">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-red-600" title="下架">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white shadow">
+                            <div class="product-badge">
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">上架中</span>
+                            </div>
+                            <img src="https://picsum.photos/id/36/300/300" alt="商品图片" class="product-image w-full">
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-900">森林主题帆布包</h3>
+                                <div class="mt-2 flex items-center text-green-600">
+                                    <i class="fas fa-coins mr-1"></i>
+                                    <span class="font-bold">800</span>
+                                    <span class="text-sm ml-1">积分</span>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <span>库存: 30</span>
+                                    <span class="mx-2">|</span>
+                                    <span>已兑换: 20</span>
+                                </div>
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button class="p-2 text-gray-600 hover:text-blue-600" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-green-600" title="编辑">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-red-600" title="下架">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white shadow">
+                            <div class="product-badge">
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">已售罄</span>
+                            </div>
+                            <img src="https://picsum.photos/id/46/300/300" alt="商品图片" class="product-image w-full">
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-900">森林导览服务</h3>
+                                <div class="mt-2 flex items-center text-green-600">
+                                    <i class="fas fa-coins mr-1"></i>
+                                    <span class="font-bold">1000</span>
+                                    <span class="text-sm ml-1">积分</span>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <span>库存: 0</span>
+                                    <span class="mx-2">|</span>
+                                    <span>已兑换: 30</span>
+                                </div>
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button class="p-2 text-gray-600 hover:text-blue-600" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-green-600" title="编辑">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-red-600" title="下架">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white shadow">
+                            <div class="product-badge">
+                                <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">已下架</span>
+                            </div>
+                            <img src="https://picsum.photos/id/56/300/300" alt="商品图片" class="product-image w-full">
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-900">森林主题明信片</h3>
+                                <div class="mt-2 flex items-center text-green-600">
+                                    <i class="fas fa-coins mr-1"></i>
+                                    <span class="font-bold">200</span>
+                                    <span class="text-sm ml-1">积分</span>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <span>库存: 200</span>
+                                    <span class="mx-2">|</span>
+                                    <span>已兑换: 0</span>
+                                </div>
+                                <div class="mt-4 flex justify-end space-x-2">
+                                    <button class="p-2 text-gray-600 hover:text-blue-600" title="查看详情">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-green-600" title="编辑">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-600 hover:text-green-600" title="上架">
+                                        <i class="fas fa-box"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 分页控件 -->
+                    <div class="flex justify-between items-center mt-6">
+                        <div class="text-sm text-gray-500">
+                            显示 1 至 4，共 12 条记录
+                        </div>
+                        <div class="flex space-x-1">
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 bg-green-500 text-white">
+                                1
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                2
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                3
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑商品弹窗 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden" id="productModal">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
+            <div class="bg-white rounded-lg shadow-xl">
+                <div class="flex justify-between items-center p-6 border-b">
+                    <h3 class="text-xl font-semibold text-gray-900">添加商品</h3>
+                    <button class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <form>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">商品名称</label>
+                                <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">所需积分</label>
+                                    <input type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">库存数量</label>
+                                    <input type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">商品分类</label>
+                                <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                    <option value="ticket">门票优惠券</option>
+                                    <option value="souvenir">文创商品</option>
+                                    <option value="service">特色服务</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">商品描述</label>
+                                <textarea rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">商品图片</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl"></i>
+                                        <div class="text-sm text-gray-600">
+                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                                <span>上传图片</span>
+                                                <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                            </label>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PNG, JPG, GIF 最大 2MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">兑换规则</label>
+                                <textarea rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500" placeholder="请输入兑换规则和使用说明"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="flex justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
+                    <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        取消
+                    </button>
+                    <button class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        保存
+                    </button>
+                    <button class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        保存并上架
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('积分商城管理');
+    </script>
+</body>
+</html> 

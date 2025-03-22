@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>森林公园小程序原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            border-radius: 40px;
+            overflow: hidden;
+            border: 12px solid #000;
+            position: relative;
+            background: #fff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .frame-title {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold text-center mb-10 text-green-800">森林公园微信小程序原型设计</h1>
+        
+        <div class="flex flex-wrap justify-center gap-16">
+            <!-- 首页 -->
+            <div class="relative">
+                <div class="phone-frame">
+                    <iframe src="home.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">首页</div>
+            </div>
+            
+            <!-- 活动列表 -->
+            <div class="relative">
+                <div class="phone-frame">
+                    <iframe src="events.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">活动</div>
+            </div>
+            
+            <!-- 活动详情 -->
+            <div class="relative">
+                <div class="phone-frame">
+                    <iframe src="event-detail.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">活动详情</div>
+            </div>
+            
+            <!-- 兴趣社群列表 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="community.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">兴趣社群</div>
+            </div>
+            
+            <!-- 预约列表 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="booking.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">预约</div>
+            </div>
+            
+            <!-- 预约详情 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="booking-detail.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">预约详情</div>
+            </div>
+            
+            <!-- 我的 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="profile.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">我的</div>
+            </div>
+            
+            <!-- 每日签到 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="check-in.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">每日签到</div>
+            </div>
+            
+            <!-- 积分商城 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="points-shop.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">积分商城</div>
+            </div>
+            
+            <!-- 导览地图 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="park-map.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">导览地图</div>
+            </div>
+            
+            <!-- 游园指南 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="guide.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">游园指南</div>
+            </div>
+            
+            <!-- 关于我们 -->
+            <div class="relative mt-24">
+                <div class="phone-frame">
+                    <iframe src="about.html" class="iframe-container"></iframe>
+                </div>
+                <div class="frame-title">关于我们</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

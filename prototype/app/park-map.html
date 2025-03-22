@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公园导览地图 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 160px);
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .park-map {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .map-controls {
+            position: absolute;
+            right: 16px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .map-control-btn {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+        
+        .location-btn {
+            position: absolute;
+            left: 16px;
+            bottom: 100px;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #05c160;
+        }
+        
+        .map-search {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            z-index: 10;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-input i {
+            color: #999;
+            margin-right: 8px;
+        }
+        
+        .search-text {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .search-cancel {
+            color: #05c160;
+            font-size: 14px;
+            margin-left: auto;
+            padding-left: 10px;
+        }
+        
+        .map-layers {
+            position: absolute;
+            left: 16px;
+            top: 80px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .layer-btn {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #666;
+            border-radius: 6px;
+        }
+        
+        .layer-btn.active {
+            background-color: #e9f7ef;
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .layer-btn i {
+            margin-right: 8px;
+        }
+        
+        .map-item {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(5, 193, 96, 0.9);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+        }
+        
+        .map-item.restroom {
+            background-color: rgba(64, 116, 255, 0.9);
+            top: 30%;
+            left: 25%;
+        }
+        
+        .map-item.scenic {
+            background-color: rgba(255, 164, 48, 0.9);
+            top: 40%;
+            left: 45%;
+        }
+        
+        .map-item.restaurant {
+            background-color: rgba(235, 59, 90, 0.9);
+            top: 60%;
+            left: 65%;
+        }
+        
+        .map-item.entrance {
+            background-color: rgba(62, 204, 171, 0.9);
+            top: 75%;
+            left: 20%;
+        }
+        
+        .map-item.parking {
+            background-color: rgba(107, 114, 142, 0.9);
+            top: 80%;
+            left: 80%;
+        }
+        
+        .map-item.shop {
+            background-color: rgba(154, 93, 255, 0.9);
+            top: 25%;
+            left: 70%;
+        }
+        
+        .map-item.info {
+            background-color: rgba(20, 175, 240, 0.9);
+            top: 50%;
+            left: 30%;
+        }
+        
+        .map-marker {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            top: 55%;
+            left: 50%;
+            color: #ff3b30;
+            font-size: 36px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -100%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -100%) scale(1.1);
+            }
+            100% {
+                transform: translate(-50%, -100%) scale(1);
+            }
+        }
+        
+        .place-card {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-radius: 16px 16px 0 0;
+            padding: 20px 16px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(70%);
+            transition: transform 0.3s ease;
+            z-index: 20;
+        }
+        
+        .place-card.active {
+            transform: translateY(0);
+        }
+        
+        .place-handle {
+            width: 40px;
+            height: 5px;
+            background-color: #ddd;
+            border-radius: 3px;
+            margin: 0 auto 16px;
+        }
+        
+        .place-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .place-type {
+            display: inline-block;
+            font-size: 12px;
+            color: #05c160;
+            background-color: #e9f7ef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .place-info {
+            display: flex;
+            margin-bottom: 16px;
+        }
+        
+        .place-details {
+            flex: 1;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .place-image {
+            width: 90px;
+            height: 90px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-left: 12px;
+        }
+        
+        .place-meta {
+            display: flex;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+        
+        .place-meta-item {
+            display: flex;
+            align-items: center;
+            margin-right: 16px;
+        }
+        
+        .place-meta-item i {
+            margin-right: 4px;
+            color: #05c160;
+        }
+        
+        .place-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .place-action-btn {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .navigate-btn {
+            background-color: #05c160;
+            color: white;
+        }
+        
+        .navigate-btn i {
+            margin-right: 6px;
+        }
+        
+        .share-btn {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+        
+        .share-btn i {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="home.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">公园导览地图</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <!-- 地图容器 -->
+        <div class="map-container">
+            <img src="https://picsum.photos/1000/1400?image=200" alt="森林公园地图" class="park-map">
+            
+            <!-- 搜索框 -->
+            <div class="map-search">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <div class="search-text">搜索园内设施或景点</div>
+                    <div class="search-cancel">取消</div>
+                </div>
+            </div>
+            
+            <!-- 图层选择 -->
+            <div class="map-layers">
+                <div class="layer-btn active">
+                    <i class="fas fa-map"></i>
+                    <span>全部</span>
+                </div>
+                <div class="layer-btn">
+                    <i class="fas fa-mountain"></i>
+                    <span>景点</span>
+                </div>
+                <div class="layer-btn">
+                    <i class="fas fa-utensils"></i>
+                    <span>餐饮</span>
+                </div>
+                <div class="layer-btn">
+                    <i class="fas fa-toilet"></i>
+                    <span>卫生间</span>
+                </div>
+                <div class="layer-btn">
+                    <i class="fas fa-parking"></i>
+                    <span>停车场</span>
+                </div>
+            </div>
+            
+            <!-- 地图控制 -->
+            <div class="map-controls">
+                <div class="map-control-btn">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="map-control-btn">
+                    <i class="fas fa-minus"></i>
+                </div>
+                <div class="map-control-btn">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+            </div>
+            
+            <!-- 定位按钮 -->
+            <div class="location-btn">
+                <i class="fas fa-location-arrow"></i>
+            </div>
+            
+            <!-- 地图上的设施标记 -->
+            <div class="map-item restroom">
+                <i class="fas fa-toilet"></i>
+            </div>
+            
+            <div class="map-item scenic">
+                <i class="fas fa-mountain"></i>
+            </div>
+            
+            <div class="map-item restaurant">
+                <i class="fas fa-utensils"></i>
+            </div>
+            
+            <div class="map-item entrance">
+                <i class="fas fa-door-open"></i>
+            </div>
+            
+            <div class="map-item parking">
+                <i class="fas fa-parking"></i>
+            </div>
+            
+            <div class="map-item shop">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            
+            <div class="map-item info">
+                <i class="fas fa-info"></i>
+            </div>
+            
+            <!-- 当前位置标记 -->
+            <div class="map-marker">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+        </div>
+        
+        <!-- 地点信息卡片 -->
+        <div class="place-card active">
+            <div class="place-handle"></div>
+            <div class="place-name">枫叶观景台</div>
+            <div class="place-type">景点</div>
+            
+            <div class="place-info">
+                <div class="place-details">
+                    森林公园最受欢迎的景点之一，可以俯瞰整个枫叶区域，秋季时节层林尽染，色彩绚丽。设有木质观景平台，配备望远镜，是拍照、赏景的绝佳位置。
+                </div>
+                <img src="https://picsum.photos/400/400?image=210" alt="景点图片" class="place-image">
+            </div>
+            
+            <div class="place-meta">
+                <div class="place-meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>开放时间: 8:00-17:30</span>
+                </div>
+                <div class="place-meta-item">
+                    <i class="fas fa-walking"></i>
+                    <span>距离: 350米</span>
+                </div>
+            </div>
+            
+            <div class="place-actions">
+                <button class="place-action-btn navigate-btn">
+                    <i class="fas fa-directions"></i>
+                    <span>导航到这里</span>
+                </button>
+                <button class="place-action-btn share-btn">
+                    <i class="fas fa-share-alt"></i>
+                    <span>分享</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="wx-tabbar">
+        <a href="home.html" class="wx-tab-item active">
+            <i class="fas fa-home wx-tab-icon"></i>
+            <span>首页</span>
+        </a>
+        <a href="events.html" class="wx-tab-item">
+            <i class="fas fa-calendar-alt wx-tab-icon"></i>
+            <span>活动</span>
+        </a>
+        <a href="booking.html" class="wx-tab-item">
+            <i class="fas fa-ticket-alt wx-tab-icon"></i>
+            <span>预约</span>
+        </a>
+        <a href="profile.html" class="wx-tab-item">
+            <i class="fas fa-user wx-tab-icon"></i>
+            <span>我的</span>
+        </a>
+    </div>
+</body>
+</html> 

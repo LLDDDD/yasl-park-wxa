@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid #eee;
+            padding: 8px 16px;
+            background-color: #fff;
+            position: sticky;
+            top: 44px;
+            z-index: 99;
+            scrollbar-width: none;
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            white-space: nowrap;
+            color: #666;
+            font-size: 15px;
+            margin-right: 12px;
+            position: relative;
+        }
+        
+        .category-tab.active {
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .category-tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background-color: #05c160;
+            border-radius: 2px;
+        }
+        
+        .event-card {
+            display: flex;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            background-color: #fff;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .event-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .event-status {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 2px 8px;
+            font-size: 11px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+        
+        .event-status.active {
+            background-color: rgba(5, 193, 96, 0.9);
+        }
+        
+        .event-status.coming {
+            background-color: rgba(230, 150, 30, 0.9);
+        }
+        
+        .event-status.ended {
+            background-color: rgba(150, 150, 150, 0.9);
+        }
+        
+        .event-info {
+            padding: 12px;
+            flex: 1;
+            position: relative;
+        }
+        
+        .event-date {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        .event-location {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .event-attendees {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .attendee-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: -6px;
+            border: 1px solid white;
+            object-fit: cover;
+        }
+        
+        .attendee-count {
+            font-size: 12px;
+            color: #666;
+            margin-left: 10px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-input {
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 8px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            color: #999;
+        }
+        
+        .search-icon {
+            margin-right: 6px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <div class="wx-status-bar-title">活动</div>
+    </div>
+
+    <!-- 搜索栏 -->
+    <div class="search-bar">
+        <div class="search-input">
+            <i class="fas fa-search search-icon"></i>
+            <span>搜索活动</span>
+        </div>
+    </div>
+
+    <!-- 分类导航 -->
+    <div class="category-tabs">
+        <div class="category-tab active">全部活动</div>
+        <div class="category-tab">户外探险</div>
+        <div class="category-tab">亲子活动</div>
+        <div class="category-tab">艺术文化</div>
+        <div class="category-tab">公益环保</div>
+        <div class="category-tab">科普教育</div>
+        <div class="category-tab">休闲娱乐</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <div class="container">
+            <!-- 活动列表 -->
+            <div class="event-list">
+                <!-- 活动卡片1 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=111" alt="植树活动" class="event-image">
+                        <div class="event-status active">进行中</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">春季植树节特别活动</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-03-12 09:00
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            东部山林区
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">78人已参与</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 活动卡片2 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=112" alt="露营活动" class="event-image">
+                        <div class="event-status coming">即将开始</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">夏日星空露营音乐会</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-07-15 19:30
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            中央草坪区
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/24.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">45人已参与</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 活动卡片3 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=113" alt="昆虫展览" class="event-image">
+                        <div class="event-status active">进行中</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">神奇昆虫世界特展</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-04-01 ~ 2023-05-30
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            自然博物馆
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/52.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">120人已参与</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 活动卡片4 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=114" alt="音乐会" class="event-image">
+                        <div class="event-status ended">已结束</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">森林交响音乐会</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-02-25 19:00
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            湖心岛露天剧场
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">230人已参与</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 活动卡片5 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=115" alt="亲子活动" class="event-image">
+                        <div class="event-status active">进行中</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">亲子萌宠互动活动</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-04-15 10:00
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            儿童互动中心
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/women/72.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/73.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/74.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">68人已参与</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 活动卡片6 -->
+                <a href="event-detail.html" class="event-card">
+                    <div style="position: relative;">
+                        <img src="https://picsum.photos/500/500?image=116" alt="绘画活动" class="event-image">
+                        <div class="event-status coming">即将开始</div>
+                    </div>
+                    <div class="event-info">
+                        <h3 class="font-bold">森林写生艺术周</h3>
+                        <div class="event-date">
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            2023-05-20 ~ 2023-05-27
+                        </div>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            各景点区域
+                        </div>
+                        <div class="event-attendees">
+                            <img src="https://randomuser.me/api/portraits/men/82.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/83.jpg" alt="参与者" class="attendee-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/84.jpg" alt="参与者" class="attendee-avatar">
+                            <span class="attendee-count">32人已参与</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="wx-tabbar">
+        <a href="home.html" class="wx-tab-item">
+            <i class="fas fa-home wx-tab-icon"></i>
+            <span>首页</span>
+        </a>
+        <a href="events.html" class="wx-tab-item active">
+            <i class="fas fa-calendar-alt wx-tab-icon"></i>
+            <span>活动</span>
+        </a>
+        <a href="booking.html" class="wx-tab-item">
+            <i class="fas fa-ticket-alt wx-tab-icon"></i>
+            <span>预约</span>
+        </a>
+        <a href="profile.html" class="wx-tab-item">
+            <i class="fas fa-user wx-tab-icon"></i>
+            <span>我的</span>
+        </a>
+    </div>
+</body>
+</html> 

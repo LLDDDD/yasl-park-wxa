@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻预览 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <!-- 侧边栏内容与之前相同 -->
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">新闻预览</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 预览控制栏 -->
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-4">
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center">
+                                <i class="fas fa-desktop mr-2"></i>
+                                电脑端预览
+                            </button>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center">
+                                <i class="fas fa-mobile-alt mr-2"></i>
+                                手机端预览
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                返回编辑
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预览内容 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- 新闻头部 -->
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/64/1200/400" alt="新闻封面" class="w-full h-96 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-8">
+                            <div class="max-w-4xl mx-auto">
+                                <span class="inline-block px-3 py-1 bg-green-600 text-white text-sm rounded-full mb-4">活动新闻</span>
+                                <h1 class="text-4xl font-bold text-white mb-4">2024年春季赏花节活动预告</h1>
+                                <div class="flex items-center text-white text-sm">
+                                    <span class="mr-4">
+                                        <i class="far fa-calendar-alt mr-2"></i>
+                                        2024-03-15 09:30
+                                    </span>
+                                    <span class="mr-4">
+                                        <i class="far fa-eye mr-2"></i>
+                                        1,234 次阅读
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 新闻内容 -->
+                    <div class="max-w-4xl mx-auto px-4 py-8">
+                        <div class="prose prose-lg max-w-none">
+                            <p class="text-gray-600 leading-relaxed mb-6">
+                                随着春天的脚步渐近，森林公园一年一度的春季赏花节即将盛大开幕。今年的赏花节将以"花漾春天，自然之美"为主题，为游客带来一场视觉与心灵的盛宴。
+                            </p>
+                            
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">活动亮点</h2>
+                            <ul class="list-disc pl-6 mb-6">
+                                <li class="text-gray-600 mb-2">超过50种春季花卉同时绽放</li>
+                                <li class="text-gray-600 mb-2">专业园艺师现场讲解花卉知识</li>
+                                <li class="text-gray-600 mb-2">特色花艺展示和互动体验</li>
+                                <li class="text-gray-600 mb-2">摄影爱好者专属拍摄区域</li>
+                            </ul>
+
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">活动详情</h2>
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-gray-600 mb-2"><strong>活动时间：</strong>2024年4月1日-4月15日</p>
+                                        <p class="text-gray-600 mb-2"><strong>活动地点：</strong>森林公园主园区</p>
+                                        <p class="text-gray-600 mb-2"><strong>门票价格：</strong>成人票 80元/人</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-600 mb-2"><strong>开放时间：</strong>8:00-18:00</p>
+                                        <p class="text-gray-600 mb-2"><strong>停车信息：</strong>园区内设有停车场</p>
+                                        <p class="text-gray-600 mb-2"><strong>咨询电话：</strong>123-456-7890</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">温馨提示</h2>
+                            <div class="bg-yellow-50 p-6 rounded-lg mb-6">
+                                <ul class="list-disc pl-6">
+                                    <li class="text-gray-600 mb-2">建议提前购票，避免排队等待</li>
+                                    <li class="text-gray-600 mb-2">请遵守园区规定，爱护花草</li>
+                                    <li class="text-gray-600 mb-2">如遇雨天，部分活动可能调整</li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center text-gray-500 text-sm mt-8">
+                                <p>责任编辑：管理员</p>
+                                <p>发布时间：2024-03-15 09:30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('新闻预览');
+    </script>
+</body>
+</html> 

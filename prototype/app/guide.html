@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游园指南 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .guide-header {
+            background-color: #05c160;
+            padding: 20px 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NiIgaGVpZ2h0PSIxMDAiPgo8cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDZjMTYwIj48L3JlY3Q+CjxwYXRoIGQ9Ik0yOCA2NkwwIDUwTDAgMTZMMjggMEw1NiAxNkw1NiA1MEwyOCA2NkwyOCAxMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA3YzY2NCIgc3Ryb2tlLXdpZHRoPSIyIj48L3BhdGg+CjxwYXRoIGQ9Ik0yOCAwTDI4IDM0TDAgNTBMMCA4NEwyOCAxMDBMNTYgODRMNTYgNTBMMjggMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA3Yzk2NyIgc3Ryb2tlLXdpZHRoPSIyIj48L3BhdGg+Cjwvc3ZnPg==');
+            opacity: 0.1;
+        }
+        
+        .guide-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .guide-description {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .search-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .search-box i {
+            color: #999;
+            margin-right: 8px;
+        }
+        
+        .search-input {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .guide-tabs {
+            display: flex;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 50px;
+            z-index: 10;
+        }
+        
+        .guide-tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 15px;
+            color: #666;
+            position: relative;
+        }
+        
+        .guide-tab.active {
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .guide-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #05c160;
+            border-radius: 3px;
+        }
+        
+        .faq-list {
+            padding: 16px;
+        }
+        
+        .faq-item {
+            margin-bottom: 16px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .faq-question {
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .faq-question i {
+            color: #999;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+            color: #05c160;
+        }
+        
+        .faq-answer {
+            padding: 0 16px 16px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            border-top: 1px solid #f5f5f5;
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-tags {
+            display: flex;
+            overflow-x: auto;
+            padding: 16px;
+            gap: 10px;
+            background-color: white;
+            scrollbar-width: none;
+        }
+        
+        .faq-tags::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .faq-tag {
+            padding: 6px 16px;
+            background-color: #f5f5f5;
+            color: #666;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .faq-tag.active {
+            background-color: #e9f7ef;
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .guide-section {
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #05c160;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9f7ef;
+            color: #05c160;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        
+        .info-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .info-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .info-content ul {
+            padding-left: 16px;
+            margin-top: 8px;
+        }
+        
+        .info-content li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 16px;
+        }
+        
+        .info-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #05c160;
+        }
+        
+        .route-card {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .route-image {
+            width: 120px;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .route-info {
+            padding: 12px 16px;
+            flex: 1;
+        }
+        
+        .route-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .route-name i {
+            color: #ff9500;
+            margin-right: 4px;
+        }
+        
+        .route-meta {
+            display: flex;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .route-meta-item {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+        }
+        
+        .route-meta-item i {
+            margin-right: 4px;
+            color: #05c160;
+        }
+        
+        .route-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e9f7ef;
+            color: #05c160;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+        }
+        
+        .contact-text {
+            flex: 1;
+        }
+        
+        .contact-label {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .contact-value {
+            font-size: 15px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="home.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">游园指南</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <!-- 指南头部 -->
+        <div class="guide-header">
+            <div class="header-pattern"></div>
+            <div class="guide-title">森林公园游园指南</div>
+            <div class="guide-description">全面了解游园攻略、常见问题和参观建议</div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <div class="search-input">搜索问题...</div>
+            </div>
+        </div>
+        
+        <!-- 指南标签页 -->
+        <div class="guide-tabs">
+            <div class="guide-tab active">常见问题</div>
+            <div class="guide-tab">游园攻略</div>
+            <div class="guide-tab">规章制度</div>
+        </div>
+        
+        <!-- FAQ 标签分类 -->
+        <div class="faq-tags">
+            <div class="faq-tag active">全部</div>
+            <div class="faq-tag">票务</div>
+            <div class="faq-tag">交通</div>
+            <div class="faq-tag">设施</div>
+            <div class="faq-tag">活动</div>
+            <div class="faq-tag">预约</div>
+            <div class="faq-tag">其他</div>
+        </div>
+        
+        <!-- FAQ 列表 -->
+        <div class="faq-list">
+            <!-- FAQ 项目1 -->
+            <div class="faq-item active">
+                <div class="faq-question">
+                    <div>森林公园的开放时间是什么时候？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    森林公园全年开放，开放时间如下：<br>
+                    - 4月1日至10月31日：06:00-19:30<br>
+                    - 11月1日至次年3月31日：07:00-18:30<br>
+                    特殊节假日可能会有调整，请关注公园公告。
+                </div>
+            </div>
+            
+            <!-- FAQ 项目2 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div>森林公园门票多少钱？有哪些优惠政策？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    成人票：60元/人<br>
+                    儿童票（1.2米以下）：免费<br>
+                    学生票（凭学生证）：30元/人<br>
+                    老年人（60岁及以上，凭有效证件）：免费<br>
+                    军人、残疾人（凭有效证件）：免费<br>
+                    团体票（30人以上）：45元/人<br>
+                    年票：280元/年（不限次数入园）
+                </div>
+            </div>
+            
+            <!-- FAQ 项目3 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div>如何前往森林公园？有哪些交通方式？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    公共交通：<br>
+                    - 地铁：乘坐3号线至森林公园站，从A出口出站，步行约10分钟可达公园东门。<br>
+                    - 公交：乘坐105路、208路、516路公交车至森林公园站下车。<br><br>
+                    
+                    自驾：<br>
+                    - 导航至"森林公园"，公园设有三个停车场（东门、南门、西门），停车收费标准为10元/次。
+                </div>
+            </div>
+            
+            <!-- FAQ 项目4 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div>森林公园内有哪些餐饮设施？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    公园内共有5个餐饮区：<br>
+                    1. 森林咖啡厅（中心区域）：提供咖啡、茶点、简餐<br>
+                    2. 湖畔餐厅（湖边区域）：提供中餐、西餐<br>
+                    3. 林间小憩（东区）：提供小吃、饮品<br>
+                    4. 山顶茶屋（观景台附近）：提供茶水、点心<br>
+                    5. 野餐区（西南区）：提供烧烤设施（需提前预约）<br><br>
+                    
+                    建议高峰期提前预订座位，可通过小程序完成预约。
+                </div>
+            </div>
+            
+            <!-- FAQ 项目5 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div>参加森林公园的活动需要提前预约吗？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    是的，大部分活动需要提前预约。您可以通过以下方式预约：<br>
+                    1. 在本小程序的"活动"页面进行在线预约<br>
+                    2. 拨打客服电话进行电话预约：400-123-4567<br>
+                    3. 到公园游客中心现场预约（可能受名额限制）<br><br>
+                    
+                    热门活动（如森林探险、野营活动等）建议提前3-7天预约，部分特色活动可能需要提前更长时间预约。
+                </div>
+            </div>
+            
+            <!-- FAQ 项目6 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div>森林公园内可以携带宠物吗？</div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    公园允许携带宠物入园，但需遵守以下规定：<br>
+                    1. 宠物必须全程拴牵引绳<br>
+                    2. 犬类必须佩戴嘴套<br>
+                    3. 宠物主人需自行清理宠物排泄物<br>
+                    4. 宠物不得进入室内场馆、餐饮区、儿童游乐区<br>
+                    5. 宠物不得打扰其他游客或野生动物<br><br>
+                    
+                    违反规定的宠物主人将被要求离开公园。
+                </div>
+            </div>
+        </div>
+        
+        <!-- 游园攻略 -->
+        <div class="guide-section" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-map-signs"></i>
+                <span>推荐游览路线</span>
+            </div>
+            
+            <div class="route-card">
+                <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="森林探索路线" class="route-image">
+                <div class="route-info">
+                    <div class="route-name">
+                        <i class="fas fa-star"></i>
+                        <span>森林探索路线</span>
+                    </div>
+                    <div class="route-meta">
+                        <div class="route-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>约2小时</span>
+                        </div>
+                        <div class="route-meta-item">
+                            <i class="fas fa-route"></i>
+                            <span>3.5公里</span>
+                        </div>
+                    </div>
+                    <div class="route-desc">
+                        从东门进入，沿林间小道穿越原始森林区，途经百年古树群、观鸟台，最后到达中心湖区。适合喜欢自然探索的游客。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="route-card">
+                <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="观景休闲路线" class="route-image">
+                <div class="route-info">
+                    <div class="route-name">
+                        <i class="fas fa-star"></i>
+                        <span>观景休闲路线</span>
+                    </div>
+                    <div class="route-meta">
+                        <div class="route-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>约1.5小时</span>
+                        </div>
+                        <div class="route-meta-item">
+                            <i class="fas fa-route"></i>
+                            <span>2公里</span>
+                        </div>
+                    </div>
+                    <div class="route-desc">
+                        从南门进入，经花海区、茶园，到达高处观景台，欣赏整个公园美景，然后沿环山步道返回。适合老人和儿童。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="route-card">
+                <img src="https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="全景环游路线" class="route-image">
+                <div class="route-info">
+                    <div class="route-name">
+                        <i class="fas fa-star"></i>
+                        <span>全景环游路线</span>
+                    </div>
+                    <div class="route-meta">
+                        <div class="route-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>约4小时</span>
+                        </div>
+                        <div class="route-meta-item">
+                            <i class="fas fa-route"></i>
+                            <span>7公里</span>
+                        </div>
+                    </div>
+                    <div class="route-desc">
+                        从西门进入，沿环形主路游览公园所有主要景点，包括竹林区、溪流瀑布、生态湿地、中心湖区和森林博物馆。适合首次游园或希望全面了解公园的游客。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                <span>游园小贴士</span>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info-title">最佳游园时间</div>
+                </div>
+                <div class="info-content">
+                    <ul>
+                        <li>春季（3-5月）：春花盛开，树木新绿，是观赏花海和拍照的最佳季节。</li>
+                        <li>夏季（6-8月）：树荫遮阳，温度较市区低2-3℃，但建议避开中午高温时段。</li>
+                        <li>秋季（9-11月）：秋叶变色，尤其10月中下旬是观赏红叶的最佳时期。</li>
+                        <li>冬季（12-2月）：游客较少，可欣赏别样的雪景（如有降雪）。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <div class="info-icon">
+                        <i class="fas fa-suitcase"></i>
+                    </div>
+                    <div class="info-title">建议携带物品</div>
+                </div>
+                <div class="info-content">
+                    <ul>
+                        <li>舒适的步行鞋，避免穿新鞋或高跟鞋</li>
+                        <li>季节性防护：春秋季防风外套、夏季防晒用品、冬季保暖衣物</li>
+                        <li>充足的饮用水</li>
+                        <li>简易医药包（创可贴、常用药等）</li>
+                        <li>相机、充电宝等摄影设备</li>
+                        <li>雨具（视天气情况）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 规章制度 -->
+        <div class="guide-section" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>公园管理规定</span>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-content">
+                    为保护公园环境和确保游客安全，请遵守以下规定：
+                    <ul>
+                        <li>禁止在非指定区域野餐和生火</li>
+                        <li>禁止攀折花木、采摘果实和捕捉动物</li>
+                        <li>禁止在公园内吸烟</li>
+                        <li>禁止乱扔垃圾，请将垃圾分类投放到指定垃圾箱</li>
+                        <li>请勿在禁止通行的区域活动</li>
+                        <li>请保持安静，不要大声喧哗，尊重他人休闲空间</li>
+                        <li>未成年人需在成年人陪同下游览</li>
+                        <li>请爱护公共设施</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <i class="fas fa-phone-alt"></i>
+                <span>紧急联系方式</span>
+            </div>
+            
+            <div class="info-card">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-first-aid"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">医疗急救</div>
+                        <div class="contact-value">120 / 园内医务室: 0755-8888-1120</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">安全保卫处</div>
+                        <div class="contact-value">0755-8888-1110</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">游客服务中心</div>
+                        <div class="contact-value">0755-8888-1100</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="contact-text">
+                        <div class="contact-label">投诉建议</div>
+                        <div class="contact-value">0755-8888-1101 / service@forestpark.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="wx-tabbar">
+        <a href="home.html" class="wx-tab-item active">
+            <i class="fas fa-home wx-tab-icon"></i>
+            <span>首页</span>
+        </a>
+        <a href="events.html" class="wx-tab-item">
+            <i class="fas fa-calendar-alt wx-tab-icon"></i>
+            <span>活动</span>
+        </a>
+        <a href="booking.html" class="wx-tab-item">
+            <i class="fas fa-ticket-alt wx-tab-icon"></i>
+            <span>预约</span>
+        </a>
+        <a href="profile.html" class="wx-tab-item">
+            <i class="fas fa-user wx-tab-icon"></i>
+            <span>我的</span>
+        </a>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分明细 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .points-header {
+            background-color: #05c160;
+            padding: 16px;
+            color: white;
+            position: relative;
+        }
+        
+        .points-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+        }
+        
+        .filter-tab.active {
+            color: #05c160;
+            font-weight: 500;
+        }
+        
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #05c160;
+            border-radius: 3px;
+        }
+        
+        .point-item {
+            display: flex;
+            padding: 16px;
+            background-color: white;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .point-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9f7ef;
+            color: #05c160;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .point-icon.minus {
+            background-color: #fff0f0;
+            color: #ff4d4f;
+        }
+        
+        .point-info {
+            flex: 1;
+        }
+        
+        .point-title {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .point-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .point-value {
+            font-weight: bold;
+            font-size: 16px;
+            color: #05c160;
+        }
+        
+        .point-value.minus {
+            color: #ff4d4f;
+        }
+        
+        .month-divider {
+            padding: 8px 16px;
+            background-color: #f5f5f5;
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            padding: 40px 0;
+            text-align: center;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #ddd;
+        }
+        
+        .empty-state-text {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="points-shop.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">积分明细</div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <!-- 积分信息 -->
+        <div class="points-header">
+            <div class="text-sm opacity-80">当前积分</div>
+            <div class="points-value">1,280</div>
+        </div>
+        
+        <!-- 筛选标签 -->
+        <div class="filter-tabs">
+            <div class="filter-tab active">全部</div>
+            <div class="filter-tab">获取</div>
+            <div class="filter-tab">使用</div>
+        </div>
+        
+        <!-- 积分记录列表 -->
+        <div class="points-list">
+            <!-- 月份分割线 -->
+            <div class="month-divider">2023年11月</div>
+            
+            <!-- 积分记录项 -->
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">每日签到</div>
+                    <div class="point-time">11月30日 08:23</div>
+                </div>
+                <div class="point-value">+10</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-hiking"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">参与「秋季徒步」活动</div>
+                    <div class="point-time">11月28日 14:05</div>
+                </div>
+                <div class="point-value">+200</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon minus">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">兑换「森林系保温杯」</div>
+                    <div class="point-time">11月25日 16:38</div>
+                </div>
+                <div class="point-value minus">-680</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">连续签到7天奖励</div>
+                    <div class="point-time">11月23日 09:12</div>
+                </div>
+                <div class="point-value">+50</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">分享小程序给好友</div>
+                    <div class="point-time">11月20日 20:15</div>
+                </div>
+                <div class="point-value">+30</div>
+            </div>
+            
+            <!-- 月份分割线 -->
+            <div class="month-divider">2023年10月</div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-comment"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">活动评论被点赞</div>
+                    <div class="point-time">10月29日 11:45</div>
+                </div>
+                <div class="point-value">+15</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon minus">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">兑换「公园门票9折优惠券」</div>
+                    <div class="point-time">10月26日 14:20</div>
+                </div>
+                <div class="point-value minus">-300</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">完成公园问卷调查</div>
+                    <div class="point-time">10月18日 16:05</div>
+                </div>
+                <div class="point-value">+100</div>
+            </div>
+            
+            <div class="point-item">
+                <div class="point-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="point-info">
+                    <div class="point-title">首次注册奖励</div>
+                    <div class="point-time">10月15日 10:30</div>
+                </div>
+                <div class="point-value">+500</div>
+            </div>
+            
+            <!-- 加载更多 -->
+            <div class="text-center text-sm text-gray-400 py-4">
+                加载更多...
+            </div>
+        </div>
+        
+        <!-- 空状态（默认隐藏） -->
+        <div class="empty-state" style="display: none;">
+            <div class="empty-state-icon">
+                <i class="fas fa-receipt"></i>
+            </div>
+            <div class="empty-state-text">暂无积分记录</div>
+        </div>
+    </div>
+</body>
+</html> 

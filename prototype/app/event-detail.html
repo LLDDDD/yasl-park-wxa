@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动详情 - 森林公园</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="layout.css">
+    <style>
+        .event-cover {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 0 0 16px 16px;
+            position: relative;
+        }
+        
+        .event-title-container {
+            margin-top: -30px;
+            background-color: white;
+            padding: 16px;
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 6px;
+            color: #05c160;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .info-label {
+            width: 70px;
+            color: #999;
+            font-size: 14px;
+            padding-top: 2px;
+        }
+        
+        .info-content {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: white;
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+        
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .action-btn i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .action-btn.active {
+            color: #ff6b6b;
+        }
+        
+        .book-btn {
+            background-color: #05c160;
+            color: white;
+            padding: 10px 40px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .comment-item {
+            display: flex;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            margin-right: 12px;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        
+        .comment-meta {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .comment-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-like {
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-like i {
+            margin-right: 4px;
+        }
+        
+        .comment-like.active {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部状态栏 -->
+    <div class="wx-status-bar">
+        <a href="events.html" class="wx-back-btn">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="wx-status-bar-title">活动详情</div>
+        <div class="wx-action-btn">
+            <i class="fas fa-share-alt"></i>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="wx-content">
+        <!-- 封面图 -->
+        <img src="https://picsum.photos/1000/500?image=111" alt="植树活动" class="event-cover">
+        
+        <!-- 活动标题区域 -->
+        <div class="event-title-container">
+            <div class="tag">公益活动</div>
+            <h1 class="text-xl font-bold mt-2">春季植树节特别活动</h1>
+            <div class="flex items-center mt-3">
+                <div class="text-sm text-gray mr-3">
+                    <i class="far fa-calendar-alt mr-1"></i>
+                    2023-03-12 09:00
+                </div>
+                <div class="text-sm text-gray">
+                    <i class="fas fa-map-marker-alt mr-1"></i>
+                    东部山林区
+                </div>
+            </div>
+        </div>
+        
+        <!-- 活动详情内容 -->
+        <div class="container">
+            <!-- 活动信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    活动介绍
+                </div>
+                <div class="card p-3">
+                    <p class="text-sm leading-relaxed">
+                        为了响应全国绿化环保号召，提高社会各界爱林、护林的意识，我们特别组织此次春季植树活动。通过参与植树造林，不仅可以改善生态环境，还能为下一代留下一片绿色希望。
+                    </p>
+                    <p class="text-sm leading-relaxed mt-2">
+                        活动期间，我们将有专业林业工作者指导大家正确的植树方法，同时也会讲解各种树种的特点和生长习性，让大家在参与环保的同时也能学习到相关知识。
+                    </p>
+                    <p class="text-sm leading-relaxed mt-2">
+                        我们诚挚邀请广大市民朋友携家带口共同参与，一起为森林公园增添新绿！
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 参与方式 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-hands-helping"></i>
+                    参与方式
+                </div>
+                <div class="card p-3">
+                    <div class="info-item">
+                        <div class="info-label">活动时间</div>
+                        <div class="info-content">2023年3月12日 09:00-16:00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">集合地点</div>
+                        <div class="info-content">东部山林区管理站门口</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">参与费用</div>
+                        <div class="info-content">免费</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">自备物品</div>
+                        <div class="info-content">手套、饮用水、防晒用品、适合户外活动的衣物和鞋子</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">活动对象</div>
+                        <div class="info-content">6岁以上儿童及成人</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 活动流程 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-list-ol"></i>
+                    活动流程
+                </div>
+                <div class="card p-3">
+                    <div class="mb-2">
+                        <div class="font-bold text-sm">09:00-09:30</div>
+                        <div class="text-sm">签到、领取工具和树苗</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="font-bold text-sm">09:30-10:00</div>
+                        <div class="text-sm">植树方法指导和安全注意事项讲解</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="font-bold text-sm">10:00-12:00</div>
+                        <div class="text-sm">植树活动</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="font-bold text-sm">12:00-13:30</div>
+                        <div class="text-sm">午餐休息（提供简餐）</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="font-bold text-sm">13:30-15:30</div>
+                        <div class="text-sm">继续植树、浇水</div>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm">15:30-16:00</div>
+                        <div class="text-sm">合影留念、颁发参与证书</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 参与人数 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    参与人数 (78人)
+                </div>
+                <div class="card p-3">
+                    <div class="flex flex-wrap">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/54.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/women/35.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <img src="https://randomuser.me/api/portraits/men/18.jpg" alt="参与者" class="w-8 h-8 rounded-full mr-2 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-600">+70</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 评论区 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-comment-alt"></i>
+                    活动评论 (12)
+                </div>
+                
+                <!-- 评论项1 -->
+                <div class="comment-item">
+                    <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="用户头像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-name">李小华</div>
+                        <div class="comment-text">活动安排很合理，工作人员超级热情，带孩子一起来参加义务植树，寓教于乐，特别有意义！</div>
+                        <div class="comment-meta">
+                            <div class="comment-time">3月15日</div>
+                            <div class="comment-actions">
+                                <div class="comment-like active">
+                                    <i class="fas fa-heart"></i>
+                                    <span>15</span>
+                                </div>
+                                <div class="comment-reply">
+                                    <i class="fas fa-reply"></i>
+                                    <span>回复</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 评论项2 -->
+                <div class="comment-item">
+                    <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="用户头像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-name">张大山</div>
+                        <div class="comment-text">组织得很好，公园提供了工具和树苗，还有专业的指导，第一次参加这样的活动，感觉非常棒！</div>
+                        <div class="comment-meta">
+                            <div class="comment-time">3月14日</div>
+                            <div class="comment-actions">
+                                <div class="comment-like">
+                                    <i class="far fa-heart"></i>
+                                    <span>8</span>
+                                </div>
+                                <div class="comment-reply">
+                                    <i class="fas fa-reply"></i>
+                                    <span>回复</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 评论项3 -->
+                <div class="comment-item">
+                    <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="用户头像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-name">王美丽</div>
+                        <div class="comment-text">植树那天天气超好，阳光明媚，跟大家一起劳动很开心，希望我种的小树茁壮成长！❤️</div>
+                        <div class="comment-meta">
+                            <div class="comment-time">3月13日</div>
+                            <div class="comment-actions">
+                                <div class="comment-like">
+                                    <i class="far fa-heart"></i>
+                                    <span>12</span>
+                                </div>
+                                <div class="comment-reply">
+                                    <i class="fas fa-reply"></i>
+                                    <span>回复</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 活动相册 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-images"></i>
+                    活动相册
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <img src="https://picsum.photos/300/300?image=121" alt="活动照片" class="rounded">
+                    <img src="https://picsum.photos/300/300?image=122" alt="活动照片" class="rounded">
+                    <img src="https://picsum.photos/300/300?image=123" alt="活动照片" class="rounded">
+                    <img src="https://picsum.photos/300/300?image=124" alt="活动照片" class="rounded">
+                    <img src="https://picsum.photos/300/300?image=125" alt="活动照片" class="rounded">
+                    <img src="https://picsum.photos/300/300?image=126" alt="活动照片" class="rounded">
+                </div>
+            </div>
+            
+            <!-- 底部留白，避免被底部按钮遮挡 -->
+            <div style="height: 80px;"></div>
+        </div>
+    </div>
+    
+    <!-- 底部固定按钮组 -->
+    <div class="button-group">
+        <div class="flex">
+            <div class="action-btn mr-6">
+                <i class="far fa-star"></i>
+                <span>收藏</span>
+            </div>
+            <div class="action-btn active">
+                <i class="fas fa-heart"></i>
+                <span>点赞</span>
+            </div>
+        </div>
+        <a href="booking-detail.html" class="book-btn">立即预约</a>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="wx-tabbar">
+        <a href="home.html" class="wx-tab-item">
+            <i class="fas fa-home wx-tab-icon"></i>
+            <span>首页</span>
+        </a>
+        <a href="events.html" class="wx-tab-item active">
+            <i class="fas fa-calendar-alt wx-tab-icon"></i>
+            <span>活动</span>
+        </a>
+        <a href="booking.html" class="wx-tab-item">
+            <i class="fas fa-ticket-alt wx-tab-icon"></i>
+            <span>预约</span>
+        </a>
+        <a href="profile.html" class="wx-tab-item">
+            <i class="fas fa-user wx-tab-icon"></i>
+            <span>我的</span>
+        </a>
+    </div>
+</body>
+</html> 

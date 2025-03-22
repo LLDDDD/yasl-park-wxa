@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户列表 - 森林公园管理后台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 引入布局样式 */
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s;
+        }
+        .content {
+            transition: all 0.3s;
+        }
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sub-menu.active {
+            max-height: 500px;
+        }
+        
+        /* 表格样式 */
+        .user-table th {
+            position: relative;
+        }
+        
+        .user-table th:after {
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+        }
+        
+        .user-table th.sort-asc:after {
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid currentColor;
+        }
+        
+        .user-table th.sort-desc:after {
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid currentColor;
+        }
+        
+        /* 表格分页样式 */
+        .pagination-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="https://picsum.photos/id/28/32/32" alt="Logo" class="w-8 h-8 rounded-full mr-3">
+                    <h1 id="sidebar-title" class="text-xl font-bold">森林公园管理系统</h1>
+                </div>
+                <button id="toggle-sidebar" class="text-white focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="mt-5">
+                <ul>
+                    <li class="mb-1">
+                        <a href="index.html" class="flex items-center py-3 px-5 hover:bg-green-700 rounded-md">
+                            <i class="fas fa-home w-6"></i>
+                            <span id="menu-text" class="ml-3">控制面板</span>
+                        </a>
+                    </li>
+                    <!-- 用户管理 -->
+                    <li class="mb-1">
+                        <a href="users.html" class="flex items-center py-3 px-5 bg-green-700 rounded-md">
+                            <i class="fas fa-users w-6"></i>
+                            <span id="menu-text" class="ml-3">会员人员管理</span>
+                        </a>
+                    </li>
+                    <!-- 内容管理 -->
+                    <li class="mb-1">
+                        <a href="#" class="flex items-center justify-between py-3 px-5 hover:bg-green-700 rounded-md menu-toggle">
+                            <div class="flex items-center">
+                                <i class="fas fa-newspaper w-6"></i>
+                                <span id="menu-text" class="ml-3">内容管理</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform transform"></i>
+                        </a>
+                        <ul class="sub-menu pl-12 bg-green-900">
+                            <li>
+                                <a href="news.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    活动新闻
+                                </a>
+                            </li>
+                            <li>
+                                <a href="booking.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    预约排期活动
+                                </a>
+                            </li>
+                            <li>
+                                <a href="about.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    关于我们
+                                </a>
+                            </li>
+                            <li>
+                                <a href="guide.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    导览指南
+                                </a>
+                            </li>
+                            <li>
+                                <a href="map.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    地图导航
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 社群管理 -->
+                    <li class="mb-1">
+                        <a href="community.html" class="flex items-center py-3 px-5 hover:bg-green-700 rounded-md">
+                            <i class="fas fa-users-cog w-6"></i>
+                            <span id="menu-text" class="ml-3">兴趣社群管理</span>
+                        </a>
+                    </li>
+                    <!-- 积分管理 -->
+                    <li class="mb-1">
+                        <a href="#" class="flex items-center justify-between py-3 px-5 hover:bg-green-700 rounded-md menu-toggle">
+                            <div class="flex items-center">
+                                <i class="fas fa-coins w-6"></i>
+                                <span id="menu-text" class="ml-3">积分系统</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform transform"></i>
+                        </a>
+                        <ul class="sub-menu pl-12 bg-green-900">
+                            <li>
+                                <a href="points.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    积分管理
+                                </a>
+                            </li>
+                            <li>
+                                <a href="points-shop.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    积分商城
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 用户行为管理 -->
+                    <li class="mb-1">
+                        <a href="#" class="flex items-center justify-between py-3 px-5 hover:bg-green-700 rounded-md menu-toggle">
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-line w-6"></i>
+                                <span id="menu-text" class="ml-3">用户行为</span>
+                            </div>
+                            <i class="fas fa-chevron-down transition-transform transform"></i>
+                        </a>
+                        <ul class="sub-menu pl-12 bg-green-900">
+                            <li>
+                                <a href="check-in-records.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    打卡记录
+                                </a>
+                            </li>
+                            <li>
+                                <a href="favorites.html" class="block py-2 px-4 hover:bg-green-700 rounded-md">
+                                    收藏记录
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 营销工具 -->
+                    <li class="mb-1">
+                        <a href="invitation.html" class="flex items-center py-3 px-5 hover:bg-green-700 rounded-md">
+                            <i class="fas fa-share-alt w-6"></i>
+                            <span id="menu-text" class="ml-3">邀请分享管理</span>
+                        </a>
+                    </li>
+                    <!-- 系统设置 -->
+                    <li class="mb-1">
+                        <a href="#" class="flex items-center py-3 px-5 hover:bg-green-700 rounded-md">
+                            <i class="fas fa-cog w-6"></i>
+                            <span id="menu-text" class="ml-3">系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <div id="content" class="content flex-1 ml-80">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white h-16 shadow px-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-semibold text-gray-800" id="page-title">会员人员管理</h2>
+                </div>
+                <div class="flex items-center">
+                    <button class="mr-4 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-button">
+                            <img src="https://picsum.photos/id/64/40/40" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-gray-700">管理员</span>
+                            <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" id="user-menu">
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">个人资料</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">修改密码</a>
+                            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="p-6">
+                <!-- 会员管理内容 -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <!-- 搜索和筛选区域 -->
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 md:mb-0">会员列表</h3>
+                        <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 w-full md:w-auto">
+                            <!-- 搜索框 -->
+                            <div class="relative flex-grow md:max-w-md">
+                                <input type="text" placeholder="搜索会员姓名/手机号" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                            <!-- 筛选下拉菜单 -->
+                            <div class="relative">
+                                <select class="appearance-none bg-white border border-gray-300 px-4 py-2 pr-8 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="">所有会员等级</option>
+                                    <option value="vip1">普通会员</option>
+                                    <option value="vip2">银卡会员</option>
+                                    <option value="vip3">金卡会员</option>
+                                </select>
+                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <!-- 导出按钮 -->
+                            <button class="flex items-center justify-center px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors">
+                                <i class="fas fa-file-export mr-2"></i> 导出数据
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 会员表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="user-table min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        会员ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        头像 & 姓名
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        手机号
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        会员等级
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        积分
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                        注册时间
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        操作
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- 会员数据行 -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">#10001</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/id/237/200/200" alt="用户头像">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">张三</div>
+                                                <div class="text-sm text-gray-500">zhangsan</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">139****5678</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            金卡会员
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">1,560</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">2023-03-15</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-900" title="查看详情">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-900" title="编辑">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900" title="禁用">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">#10002</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/id/238/200/200" alt="用户头像">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">李四</div>
+                                                <div class="text-sm text-gray-500">lisi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">159****1234</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            银卡会员
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">920</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">2023-04-20</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-900" title="查看详情">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-900" title="编辑">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900" title="禁用">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">#10003</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/id/239/200/200" alt="用户头像">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">王五</div>
+                                                <div class="text-sm text-gray-500">wangwu</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">138****9876</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            普通会员
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">450</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">2023-05-10</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-900" title="查看详情">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-900" title="编辑">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900" title="禁用">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页控件 -->
+                    <div class="flex justify-between items-center mt-6">
+                        <div class="text-sm text-gray-500">
+                            显示 1 至 3，共 36 条记录
+                        </div>
+                        <div class="flex space-x-1">
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 bg-green-500 text-white">
+                                1
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                2
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                3
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                ...
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                12
+                            </button>
+                            <button class="pagination-item rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏展开/收起功能
+        document.getElementById('toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const menuTexts = document.querySelectorAll('#menu-text');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            content.classList.toggle('content-expanded');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebarTitle.style.display = 'none';
+                menuTexts.forEach(text => text.style.display = 'none');
+            } else {
+                sidebarTitle.style.display = 'block';
+                menuTexts.forEach(text => text.style.display = 'inline');
+            }
+        });
+
+        // 下拉菜单功能
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            document.getElementById('user-menu').classList.toggle('hidden');
+        });
+
+        // 子菜单展开/收起功能
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const subMenu = this.nextElementSibling;
+                subMenu.classList.toggle('active');
+                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
+            });
+        });
+
+        // 设置当前页面标题
+        function setPageTitle(title) {
+            document.getElementById('page-title').textContent = title;
+            document.title = title + ' - 森林公园管理后台';
+        }
+        
+        // 设置当前页面标题
+        setPageTitle('会员人员管理');
+    </script>
+</body>
+</html>

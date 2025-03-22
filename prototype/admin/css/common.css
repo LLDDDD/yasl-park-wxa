@@ -1,0 +1,221 @@
+/* 动画效果 */
+.fade-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+.fade-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+}
+
+/* 加载动画 */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* 表格样式 */
+.table-container {
+    @apply overflow-x-auto;
+}
+.table-default {
+    @apply min-w-full divide-y divide-gray-200;
+}
+.table-header {
+    @apply bg-gray-50;
+}
+.table-header th {
+    @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+}
+.table-body {
+    @apply bg-white divide-y divide-gray-200;
+}
+.table-row {
+    @apply hover:bg-gray-50 transition-colors;
+}
+.table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+}
+
+/* 表单样式 */
+.form-group {
+    @apply mb-4;
+}
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+}
+.form-input {
+    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500;
+}
+.form-select {
+    @apply mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md;
+}
+.form-checkbox {
+    @apply h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded;
+}
+.form-radio {
+    @apply h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300;
+}
+
+/* 按钮样式 */
+.btn {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+.btn-primary {
+    @apply text-white bg-green-600 hover:bg-green-700 focus:ring-green-500;
+}
+.btn-secondary {
+    @apply text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus:ring-green-500;
+}
+.btn-danger {
+    @apply text-white bg-red-600 hover:bg-red-700 focus:ring-red-500;
+}
+.btn-warning {
+    @apply text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500;
+}
+.btn-sm {
+    @apply px-3 py-1 text-xs;
+}
+.btn-lg {
+    @apply px-6 py-3 text-base;
+}
+
+/* 卡片样式 */
+.card {
+    @apply bg-white shadow rounded-lg;
+}
+.card-header {
+    @apply px-4 py-5 border-b border-gray-200 sm:px-6;
+}
+.card-body {
+    @apply px-4 py-5 sm:p-6;
+}
+.card-footer {
+    @apply px-4 py-4 border-t border-gray-200 sm:px-6;
+}
+
+/* 标签样式 */
+.tag {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+.tag-green {
+    @apply bg-green-100 text-green-800;
+}
+.tag-red {
+    @apply bg-red-100 text-red-800;
+}
+.tag-yellow {
+    @apply bg-yellow-100 text-yellow-800;
+}
+.tag-blue {
+    @apply bg-blue-100 text-blue-800;
+}
+.tag-gray {
+    @apply bg-gray-100 text-gray-800;
+}
+
+/* 分页样式 */
+.pagination {
+    @apply flex justify-center mt-4 space-x-1;
+}
+.pagination-item {
+    @apply px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50;
+}
+.pagination-item-active {
+    @apply text-white bg-green-600 border-green-600 hover:bg-green-700;
+}
+.pagination-item-disabled {
+    @apply text-gray-400 bg-gray-100 cursor-not-allowed;
+}
+
+/* 搜索框样式 */
+.search-input {
+    @apply block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500;
+}
+.search-icon {
+    @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none;
+}
+
+/* 状态标签 */
+.status-dot {
+    @apply w-2.5 h-2.5 rounded-full inline-block mr-2;
+}
+.status-active {
+    @apply bg-green-400;
+}
+.status-inactive {
+    @apply bg-gray-400;
+}
+.status-warning {
+    @apply bg-yellow-400;
+}
+.status-error {
+    @apply bg-red-400;
+}
+
+/* 工具提示 */
+.tooltip {
+    @apply relative inline-block;
+}
+.tooltip-content {
+    @apply absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm invisible opacity-0 transition-opacity duration-300;
+}
+.tooltip:hover .tooltip-content {
+    @apply visible opacity-100;
+}
+
+/* 面包屑导航 */
+.breadcrumb {
+    @apply flex items-center space-x-2 text-sm text-gray-500;
+}
+.breadcrumb-item {
+    @apply hover:text-gray-700;
+}
+.breadcrumb-separator {
+    @apply text-gray-400;
+}
+
+/* 响应式布局辅助类 */
+.responsive-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+.responsive-flex {
+    @apply flex flex-col sm:flex-row;
+}
+
+/* 图片上传预览 */
+.image-preview {
+    @apply mt-2 relative rounded-lg overflow-hidden;
+}
+.image-preview img {
+    @apply w-full h-48 object-cover;
+}
+.image-preview-overlay {
+    @apply absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 transition-opacity duration-300;
+}
+.image-preview:hover .image-preview-overlay {
+    @apply opacity-100;
+}
+
+/* 富文本编辑器 */
+.editor-toolbar {
+    @apply flex items-center space-x-2 p-2 border-b border-gray-200;
+}
+.editor-button {
+    @apply p-1 rounded hover:bg-gray-100 focus:outline-none;
+}
+.editor-content {
+    @apply p-4 min-h-[200px] focus:outline-none;
+} 

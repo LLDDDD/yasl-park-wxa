@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>森林公园管理后台</title>
+    <!-- 引入样式文件 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    
+    <!-- 引入基础库 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <!-- 引入公共 JavaScript 文件 -->
+    <script src="js/common.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/permissions.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/page-loader.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex">
+        <!-- 侧边栏 -->
+        <div class="fixed inset-y-0 left-0 w-64 bg-green-600 text-white transition-all duration-300 z-30" id="sidebar">
+            <!-- 系统标题 -->
+            <div class="flex items-center justify-between px-4 py-3 bg-green-700">
+                <div class="flex items-center space-x-2">
+                    <img src="https://picsum.photos/id/64/32/32" alt="Logo" class="w-8 h-8 rounded">
+                    <span class="text-lg font-semibold">森林公园管理后台</span>
+                </div>
+                <button id="toggle-sidebar" class="lg:hidden">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- 导航菜单 -->
+            <nav class="mt-4 px-2">
+                <div class="space-y-2">
+                    <!-- 仪表盘 -->
+                    <a href="dashboard.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
+                        <span>系统概览</span>
+                    </a>
+
+                    <!-- 用户管理 -->
+                    <div class="space-y-1" data-permission="user:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">用户管理</p>
+                        <a href="users.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <span>用户列表</span>
+                        </a>
+                        <a href="user-behavior.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-chart-bar w-5 h-5 mr-3"></i>
+                            <span>用户行为分析</span>
+                        </a>
+                    </div>
+
+                    <!-- 活动管理 -->
+                    <div class="space-y-1" data-permission="activity:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">活动管理</p>
+                        <a href="activities.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-calendar-alt w-5 h-5 mr-3"></i>
+                            <span>活动列表</span>
+                        </a>
+                        <a href="activity-registration.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-clipboard-list w-5 h-5 mr-3"></i>
+                            <span>报名管理</span>
+                        </a>
+                        <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-star w-5 h-5 mr-3"></i>
+                            <span>评价管理</span>
+                        </a>
+                        <a href="activity-statistics.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-chart-pie w-5 h-5 mr-3"></i>
+                            <span>数据统计</span>
+                        </a>
+                    </div>
+
+                    <!-- 新闻管理 -->
+                    <div class="space-y-1" data-permission="news:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">新闻管理</p>
+                        <a href="news.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-newspaper w-5 h-5 mr-3"></i>
+                            <span>新闻列表</span>
+                        </a>
+                    </div>
+
+                    <!-- 预约管理 -->
+                    <div class="space-y-1" data-permission="booking:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">预约管理</p>
+                        <a href="booking.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-calendar-check w-5 h-5 mr-3"></i>
+                            <span>预约记录</span>
+                        </a>
+                    </div>
+
+                    <!-- 积分商城 -->
+                    <div class="space-y-1" data-permission="points:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">积分商城</p>
+                        <a href="points-shop.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-shopping-cart w-5 h-5 mr-3"></i>
+                            <span>商品管理</span>
+                        </a>
+                        <a href="points-history.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-history w-5 h-5 mr-3"></i>
+                            <span>积分记录</span>
+                        </a>
+                    </div>
+
+                    <!-- 营销工具 -->
+                    <div class="space-y-1" data-permission="marketing:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">营销工具</p>
+                        <a href="marketing.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-bullhorn w-5 h-5 mr-3"></i>
+                            <span>营销活动</span>
+                        </a>
+                    </div>
+
+                    <!-- 系统设置 -->
+                    <div class="space-y-1" data-permission="settings:view">
+                        <p class="px-4 py-2 text-xs uppercase tracking-wider text-green-200">系统设置</p>
+                        <a href="settings.html" class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-cog w-5 h-5 mr-3"></i>
+                            <span>基础设置</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="flex-1 ml-64">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center space-x-4">
+                        <button id="mobile-sidebar-button" class="lg:hidden text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="text-xl font-semibold text-gray-800" id="page-title">页面标题</h1>
+                            <!-- 面包屑导航 -->
+                            <nav class="hidden sm:flex items-center space-x-2 text-sm text-gray-500" id="breadcrumb">
+                                <a href="dashboard.html" class="hover:text-gray-700">首页</a>
+                                <i class="fas fa-chevron-right text-xs"></i>
+                                <span id="current-page">当前页面</span>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- 通知中心 -->
+                        <div class="relative">
+                            <button class="text-gray-500 hover:text-gray-700" id="notification-button">
+                                <i class="fas fa-bell"></i>
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                            </button>
+                            <!-- 通知下拉框 -->
+                            <div id="notification-menu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-gray-700">通知中心</span>
+                                        <button class="text-sm text-green-600 hover:text-green-700">全部标记为已读</button>
+                                    </div>
+                                </div>
+                                <div class="max-h-96 overflow-y-auto">
+                                    <!-- 通知列表 -->
+                                    <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0">
+                                                <i class="fas fa-user-plus text-blue-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm text-gray-700">新用户注册通知</p>
+                                                <p class="text-xs text-gray-500 mt-1">2分钟前</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <!-- 更多通知项... -->
+                                </div>
+                                <div class="px-4 py-2 border-t border-gray-200">
+                                    <a href="#" class="text-sm text-green-600 hover:text-green-700">查看全部通知</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 用户菜单 -->
+                        <div class="relative">
+                            <button id="user-menu-button" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
+                                <img src="https://picsum.photos/id/1005/32/32" alt="User" class="w-8 h-8 rounded-full">
+                                <span>管理员</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <!-- 用户菜单下拉框 -->
+                            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user mr-2"></i>个人信息
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-key mr-2"></i>修改密码
+                                </a>
+                                <hr class="my-1">
+                                <a href="login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>退出登录
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <main class="p-6">
+                <!-- 具体页面内容将在这里动态插入 -->
+                <div id="page-content"></div>
+            </main>
+        </div>
+    </div>
+</body>
+</html> 
