@@ -46,7 +46,54 @@
     <div class="flex h-screen">
         <!-- 侧边栏 -->
         <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
-            <!-- 侧边栏内容与之前相同 -->
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-xl font-bold" id="sidebar-title">森林公园管理后台</h1>
+                    <button id="toggle-sidebar" class="text-white focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="dashboard.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-home"></i>
+                                <span id="menu-text" class="ml-3">系统概览</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activities.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="menu-text" class="ml-3">活动管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-registration.html" class="flex items-center px-4 py-2 text-white bg-green-700 rounded-lg">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span id="menu-text" class="ml-3">报名管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-star"></i>
+                                <span id="menu-text" class="ml-3">评价管理</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marketing.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-bullhorn"></i>
+                                <span id="menu-text" class="ml-3">营销工具</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="settings.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
+                                <i class="fas fa-cog"></i>
+                                <span id="menu-text" class="ml-3">系统设置</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </aside>
 
         <!-- 主内容区 -->

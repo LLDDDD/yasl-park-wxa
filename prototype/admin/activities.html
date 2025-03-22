@@ -35,54 +35,7 @@
     <div class="flex h-screen">
         <!-- 侧边栏 -->
         <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
-            <div class="p-4">
-                <div class="flex items-center justify-between mb-8">
-                    <h1 class="text-xl font-bold" id="sidebar-title">森林公园管理后台</h1>
-                    <button id="toggle-sidebar" class="text-white focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                <nav>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="dashboard.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
-                                <i class="fas fa-home"></i>
-                                <span id="menu-text" class="ml-3">系统概览</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="activities.html" class="flex items-center px-4 py-2 text-white bg-green-700 rounded-lg">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="menu-text" class="ml-3">活动管理</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="activity-registration.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
-                                <i class="fas fa-clipboard-list"></i>
-                                <span id="menu-text" class="ml-3">报名管理</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="activity-reviews.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
-                                <i class="fas fa-star"></i>
-                                <span id="menu-text" class="ml-3">评价管理</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="marketing.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
-                                <i class="fas fa-bullhorn"></i>
-                                <span id="menu-text" class="ml-3">营销工具</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="settings.html" class="flex items-center px-4 py-2 text-white hover:bg-green-700 rounded-lg">
-                                <i class="fas fa-cog"></i>
-                                <span id="menu-text" class="ml-3">系统设置</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <!-- 侧边栏内容由 JS 动态生成 -->
         </aside>
 
         <!-- 主内容区 -->
@@ -277,39 +230,12 @@
         </div>
     </div>
 
+    <!-- 引入侧边栏脚本 -->
+    <script src="js/sidebar.js"></script>
     <script>
-        // 侧边栏展开/收起功能
-        document.getElementById('toggle-sidebar').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const sidebarTitle = document.getElementById('sidebar-title');
-            const menuTexts = document.querySelectorAll('#menu-text');
-            
-            sidebar.classList.toggle('sidebar-collapsed');
-            content.classList.toggle('content-expanded');
-            
-            if (sidebar.classList.contains('sidebar-collapsed')) {
-                sidebarTitle.style.display = 'none';
-                menuTexts.forEach(text => text.style.display = 'none');
-            } else {
-                sidebarTitle.style.display = 'block';
-                menuTexts.forEach(text => text.style.display = 'inline');
-            }
-        });
-
         // 下拉菜单功能
         document.getElementById('user-menu-button').addEventListener('click', function() {
             document.getElementById('user-menu').classList.toggle('hidden');
-        });
-
-        // 子菜单展开/收起功能
-        document.querySelectorAll('.menu-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                const subMenu = this.nextElementSibling;
-                subMenu.classList.toggle('active');
-                this.querySelector('.fa-chevron-down').classList.toggle('rotate-180');
-            });
         });
 
         // 设置当前页面标题
@@ -325,6 +251,76 @@
         let currentPage = 1;
         let pageSize = 9;
         let totalActivities = 0;
+
+        // 模拟数据生成函数
+        function generateMockActivities() {
+            const activityTypes = ['outdoor', 'education', 'culture', 'charity'];
+            const statuses = ['draft', 'published', 'ongoing', 'ended', 'cancelled'];
+            const locations = ['森林步道', '科普中心', '文化广场', '生态园区', '湖畔草坪'];
+            // 确保存在的图片ID列表
+            const imageIds = [237, 238, 239, 240, 241, 242, 243, 244, 245, 246];
+            const activities = [];
+
+            // 生成30个模拟活动
+            for (let i = 1; i <= 30; i++) {
+                const startTime = new Date();
+                startTime.setDate(startTime.getDate() + Math.floor(Math.random() * 30)); // 未来30天内
+                const endTime = new Date(startTime);
+                endTime.setHours(endTime.getHours() + Math.floor(Math.random() * 48)); // 持续1-48小时
+
+                activities.push({
+                    id: i,
+                    title: `活动${i}: ${['趣味植树', '自然观察', '环保讲座', '文化表演', '公益清洁'][Math.floor(Math.random() * 5)]}`,
+                    type: activityTypes[Math.floor(Math.random() * activityTypes.length)],
+                    status: statuses[Math.floor(Math.random() * statuses.length)],
+                    startTime: startTime.toISOString(),
+                    endTime: endTime.toISOString(),
+                    location: locations[Math.floor(Math.random() * locations.length)],
+                    cover: `https://picsum.photos/400/300?image=80`,
+                    description: '这是一个精彩的森林公园活动，欢迎大家踊跃参加！',
+                    minParticipants: Math.floor(Math.random() * 10) + 5,
+                    maxParticipants: Math.floor(Math.random() * 50) + 20,
+                    needReview: Math.random() > 0.5,
+                    needDeposit: Math.random() > 0.5
+                });
+            }
+
+            return activities;
+        }
+
+        // 模拟数据过滤函数
+        function filterMockActivities(activities, searchQuery, typeFilter, statusFilter, dateFilter) {
+            return activities.filter(activity => {
+                // 搜索过滤
+                if (searchQuery && !activity.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    return false;
+                }
+
+                // 类型过滤
+                if (typeFilter && activity.type !== typeFilter) {
+                    return false;
+                }
+
+                // 状态过滤
+                if (statusFilter && activity.status !== statusFilter) {
+                    return false;
+                }
+
+                // 日期过滤
+                if (dateFilter) {
+                    const filterDate = new Date(dateFilter);
+                    const activityStart = new Date(activity.startTime);
+                    const activityEnd = new Date(activity.endTime);
+                    
+                    // 检查活动日期是否与筛选日期有重叠
+                    if (filterDate < activityStart || filterDate > activityEnd) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -367,15 +363,20 @@
                 const statusFilter = document.getElementById('status-filter').value;
                 const dateFilter = document.getElementById('date-filter').value;
 
-                // TODO: 替换为实际的 API 调用
-                const response = await fetch(`/api/activities?page=${currentPage}&pageSize=${pageSize}&search=${searchQuery}&type=${typeFilter}&status=${statusFilter}&date=${dateFilter}`);
-                const data = await response.json();
-
-                totalActivities = data.total;
+                // 使用模拟数据
+                const allActivities = generateMockActivities();
+                const filteredActivities = filterMockActivities(allActivities, searchQuery, typeFilter, statusFilter, dateFilter);
+                
+                // 计算分页
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                const paginatedActivities = filteredActivities.slice(start, end);
+                
+                totalActivities = filteredActivities.length;
                 document.getElementById('total-activities').textContent = `共 ${totalActivities} 个活动`;
 
                 // 渲染活动列表
-                renderActivityList(data.activities);
+                renderActivityList(paginatedActivities);
 
                 // 更新分页
                 renderPagination();
@@ -388,39 +389,47 @@
         // 渲染活动列表
         function renderActivityList(activities) {
             const container = document.querySelector('.grid');
+            container.className = 'space-y-4'; // 修改为纵向列表布局
             container.innerHTML = '';
 
             activities.forEach(activity => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
                 card.innerHTML = `
-                    <div class="relative pb-2/3">
-                        <img src="${activity.cover || 'https://picsum.photos/400/300'}" alt="${activity.title}" class="absolute h-full w-full object-cover">
-                        <div class="absolute top-2 right-2">
-                            <span class="px-2 py-1 text-xs rounded-full ${getStatusBadgeClass(activity.status)}">
-                                ${getStatusText(activity.status)}
-                            </span>
+                    <div class="flex">
+                        <div class="w-48 h-32 flex-shrink-0">
+                            <img src="${activity.cover}" alt="${activity.title}" 
+                                class="w-full h-full object-cover"
+                                onerror="this.onerror=null; this.src='https://picsum.photos/400/300?grayscale';">
                         </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">${activity.title}</h3>
-                        <div class="space-y-2 text-sm text-gray-600">
-                            <p><i class="fas fa-calendar-alt w-5"></i> ${formatDate(activity.startTime)} ~ ${formatDate(activity.endTime)}</p>
-                            <p><i class="fas fa-map-marker-alt w-5"></i> ${activity.location}</p>
-                            <p><i class="fas fa-users w-5"></i> ${activity.currentParticipants}/${activity.maxParticipants}人</p>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <div class="space-x-2">
-                                <button onclick="editActivity(${activity.id})" class="px-3 py-1 text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteActivity(${activity.id})" class="px-3 py-1 text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                        <div class="flex-1 p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800">${activity.title}</h3>
+                                <span class="px-2 py-1 text-xs rounded-full ${getStatusBadgeClass(activity.status)}">
+                                    ${getStatusText(activity.status)}
+                                </span>
                             </div>
-                            <a href="activity-registration.html?id=${activity.id}" class="text-green-600 hover:text-green-800">
-                                查看报名 <i class="fas fa-chevron-right ml-1"></i>
-                            </a>
+                            <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                <p><i class="fas fa-calendar-alt w-5"></i> ${formatDate(activity.startTime)} ~ ${formatDate(activity.endTime)}</p>
+                                <p><i class="fas fa-map-marker-alt w-5"></i> ${activity.location}</p>
+                                <p><i class="fas fa-users w-5"></i> ${activity.minParticipants}-${activity.maxParticipants}人</p>
+                                <p class="line-clamp-2 text-gray-500">${activity.description}</p>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="space-x-2">
+                                    <button onclick="editActivity(${activity.id})" class="px-3 py-1 text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-edit"></i>
+                                        <span>编辑</span>
+                                    </button>
+                                    <button onclick="deleteActivity(${activity.id})" class="px-3 py-1 text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                        <span>删除</span>
+                                    </button>
+                                </div>
+                                <a href="activity-preview.html?id=${activity.id}" class="text-green-600 hover:text-green-800">
+                                    查看详情 <i class="fas fa-chevron-right ml-1"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -503,20 +512,24 @@
                 document.getElementById('modal-title').textContent = '编辑活动';
                 document.getElementById('activity-id').value = activityId;
 
-                // TODO: 替换为实际的 API 调用
-                const response = await fetch(`/api/activities/${activityId}`);
-                const activity = await response.json();
+                // 使用模拟数据
+                const allActivities = generateMockActivities();
+                const activity = allActivities.find(a => a.id === activityId);
+
+                if (!activity) {
+                    throw new Error('活动不存在');
+                }
 
                 // 填充表单数据
                 document.getElementById('title').value = activity.title;
                 document.getElementById('type').value = activity.type;
-                document.getElementById('start-time').value = activity.startTime;
-                document.getElementById('end-time').value = activity.endTime;
+                document.getElementById('start-time').value = activity.startTime.slice(0, 16);
+                document.getElementById('end-time').value = activity.endTime.slice(0, 16);
                 document.getElementById('location').value = activity.location;
                 document.getElementById('min-participants').value = activity.minParticipants;
                 document.getElementById('max-participants').value = activity.maxParticipants;
                 document.getElementById('description').value = activity.description;
-                document.getElementById('content').value = activity.content;
+                document.getElementById('content').value = activity.description;
                 document.getElementById('need-review').checked = activity.needReview;
                 document.getElementById('need-deposit').checked = activity.needDeposit;
 

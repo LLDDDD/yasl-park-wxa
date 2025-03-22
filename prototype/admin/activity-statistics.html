@@ -39,7 +39,7 @@
     <div class="flex h-screen">
         <!-- 侧边栏 -->
         <aside id="sidebar" class="sidebar bg-green-800 text-white h-screen fixed top-0 left-0 overflow-y-auto">
-            <!-- 侧边栏内容与之前相同 -->
+            <!-- 侧边栏内容由 JS 动态生成 -->
         </aside>
 
         <!-- 主内容区 -->
@@ -224,99 +224,12 @@
         </div>
     </div>
 
+    <!-- 引入侧边栏脚本 -->
+    <script src="js/sidebar.js"></script>
     <script>
-        // 侧边栏展开/收起功能
-        document.getElementById('toggle-sidebar').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const sidebarTitle = document.getElementById('sidebar-title');
-            const menuTexts = document.querySelectorAll('#menu-text');
-            
-            sidebar.classList.toggle('sidebar-collapsed');
-            content.classList.toggle('content-expanded');
-            
-            if (sidebar.classList.contains('sidebar-collapsed')) {
-                sidebarTitle.style.display = 'none';
-                menuTexts.forEach(text => text.style.display = 'none');
-            } else {
-                sidebarTitle.style.display = 'block';
-                menuTexts.forEach(text => text.style.display = 'inline');
-            }
-        });
-
         // 下拉菜单功能
         document.getElementById('user-menu-button').addEventListener('click', function() {
             document.getElementById('user-menu').classList.toggle('hidden');
-        });
-
-        // 初始化报名趋势图表
-        const registrationTrendChart = echarts.init(document.getElementById('registration-trend'));
-        registrationTrendChart.setOption({
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['报名人数', '参与人数']
-            },
-            xAxis: {
-                type: 'category',
-                data: ['3-10', '3-11', '3-12', '3-13', '3-14', '3-15', '3-16']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name: '报名人数',
-                    type: 'line',
-                    smooth: true,
-                    data: [120, 132, 101, 134, 90, 230, 210]
-                },
-                {
-                    name: '参与人数',
-                    type: 'line',
-                    smooth: true,
-                    data: [110, 122, 91, 124, 85, 220, 200]
-                }
-            ]
-        });
-
-        // 初始化参与人群分析图表
-        const participantAnalysisChart = echarts.init(document.getElementById('participant-analysis'));
-        participantAnalysisChart.setOption({
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left'
-            },
-            series: [
-                {
-                    name: '年龄分布',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        { value: 35, name: '18-25岁' },
-                        { value: 30, name: '26-35岁' },
-                        { value: 20, name: '36-45岁' },
-                        { value: 15, name: '46岁以上' }
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        });
-
-        // 窗口大小改变时重绘图表
-        window.addEventListener('resize', function() {
-            registrationTrendChart.resize();
-            participantAnalysisChart.resize();
         });
 
         // 设置当前页面标题
@@ -326,7 +239,7 @@
         }
         
         // 设置当前页面标题
-        setPageTitle('活动数据统计');
+        setPageTitle('活动统计');
     </script>
 </body>
 </html> 

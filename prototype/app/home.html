@@ -117,7 +117,7 @@
 
             <!-- 快捷入口 -->
             <div class="grid-4 mb-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center" onclick="window.location.href='park-map.html'">
                     <div class="feature-icon">
                         <i class="fas fa-thumbtack"></i>
                     </div>
@@ -135,11 +135,45 @@
                     </div>
                     <span class="text-sm">活动咨询</span>
                 </div>
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center" onclick="window.location.href='booking.html'">
                     <div class="feature-icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
-                    <span class="text-sm">优惠券</span>
+                    <span class="text-sm">我的预约</span>
+                </div>
+            </div>
+
+            <!-- 最新活动资讯 -->
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="section-title">最新活动资讯</h2>
+                    <a href="events.html" class="view-all">查看全部 <i class="fas fa-chevron-right text-xs"></i></a>
+                </div>
+                
+                <div class="card p-3 flex mb-3">
+                    <!-- 活动图片 - 使用可靠的高质量图片源 -->
+                    <img src="https://picsum.photos/400/300?image=70" alt="植树活动" class="activity-image mr-3">
+                    <div class="flex-1">
+                        <h3 class="font-bold">春季植树节特别活动</h3>
+                        <p class="text-sm text-gray mb-1">时间: 2023-03-12 09:00</p>
+                        <div class="flex">
+                            <div class="tag">公益活动</div>
+                            <div class="tag">亲子活动</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-3 flex">
+                    <!-- 活动图片 - 使用可靠的高质量图片源 -->
+                    <img src="https://picsum.photos/400/300?image=80" alt="露营活动" class="activity-image mr-3">
+                    <div class="flex-1">
+                        <h3 class="font-bold">夏日星空露营音乐会</h3>
+                        <p class="text-sm text-gray mb-1">时间: 2023-07-15 19:30</p>
+                        <div class="flex">
+                            <div class="tag">文艺活动</div>
+                            <div class="tag">露营体验</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -174,7 +208,7 @@
             <!-- 入住商家 -->
             <div class="mb-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="section-title">入住商家</h2>
+                    <h2 class="section-title">商家推荐</h2>
                     <span class="view-all">查看全部 <i class="fas fa-chevron-right text-xs"></i></span>
                 </div>
                 <div class="horizontal-scroll">
@@ -229,39 +263,7 @@
                 </div>
             </div>
 
-            <!-- 最新活动资讯 -->
-            <div class="mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="section-title">最新活动资讯</h2>
-                    <a href="events.html" class="view-all">查看全部 <i class="fas fa-chevron-right text-xs"></i></a>
-                </div>
-                
-                <div class="card p-3 flex mb-3">
-                    <!-- 活动图片 - 使用可靠的高质量图片源 -->
-                    <img src="https://picsum.photos/400/300?image=70" alt="植树活动" class="activity-image mr-3">
-                    <div class="flex-1">
-                        <h3 class="font-bold">春季植树节特别活动</h3>
-                        <p class="text-sm text-gray mb-1">时间: 2023-03-12 09:00</p>
-                        <div class="flex">
-                            <div class="tag">公益活动</div>
-                            <div class="tag">亲子活动</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card p-3 flex">
-                    <!-- 活动图片 - 使用可靠的高质量图片源 -->
-                    <img src="https://picsum.photos/400/300?image=80" alt="露营活动" class="activity-image mr-3">
-                    <div class="flex-1">
-                        <h3 class="font-bold">夏日星空露营音乐会</h3>
-                        <p class="text-sm text-gray mb-1">时间: 2023-07-15 19:30</p>
-                        <div class="flex">
-                            <div class="tag">文艺活动</div>
-                            <div class="tag">露营体验</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
