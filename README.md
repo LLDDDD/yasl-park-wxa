@@ -22,7 +22,7 @@
 - 果。设计风格请参考图片给到的设计风格
 - HTML可交互原型:利用HTML+Tailwind CSS实现所有原型页面,CSS尽可能的采用CSS的类名而不要自己手写,结合FontAwesome(或其他开源图标库)让界面更加精致、接近实际应用效果。
 - 文件组织方式:
-每个功能界面应独立成HTML文件,例如:index.html、events.htrml、my-booking.html、my.html等。index.html作为原型图的总览页面,不直接包含各界面代码,而是通过iframe方式嵌入各个页面用做预览,并在index页面中直接嵌入各个iframe,展示所有设计,避免页面跳转。
+每个功能界面应独立成HTML文件,例如:index.html、events.html、my-booking.html、my.html等。index.html作为原型图的总览页面,不直接包含各界面代码,而是通过iframe方式嵌入各个页面用做预览,并在index页面中直接嵌入各个iframe,展示所有设计,避免页面跳转。
 增强真实感:
 界面尺寸对应iPhone 16 Pro Max,实现圆角边框,模拟真实手机显示效果。
 采用真实的相关图片和图标,而非简单占位图(可从Unsplash、Peexels等在线图库中选取)。
